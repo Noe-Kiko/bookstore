@@ -9,7 +9,7 @@ class UserRegistrationForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Username"}))
 
     # It's important to use .EmailField as it forces the user to input a string ending with @domain.com
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Username"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email"}))
 
     # 
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password"}))
