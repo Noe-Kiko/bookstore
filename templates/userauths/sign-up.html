@@ -30,7 +30,11 @@
                                             <p class="mb-30">Already have an account? <a href="page-login.html">Login</a></p>
                                         </div>
                                         <form method="post" method="POST">
+                                            <!-- Responsible creating a User Session (Provides Security) -->
                                             {% csrf_token %}
+                                            <!-- Responsible creating a User Session (Provides Security) -->
+
+                                            <!-- Recieves/Retrieves User Information -->
                                             <div class="form-group">
                                                 {{form.username}}
                                             </div>
@@ -43,6 +47,8 @@
                                             <div class="form-group">
                                                 {{form.password2}}
                                             </div>
+                                            <!-- Recieves/Retrieves User Information -->
+                                             
                                             {% comment %} <div class="form-group">
                                                 <input type="text" required="" name="username" placeholder="Username" />
                                             </div>
