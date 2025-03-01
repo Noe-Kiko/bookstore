@@ -35,6 +35,4 @@ def registerView(request):
     context = {
         'form': form,
     }
-
-    
     return render(request, "userauths/sign-up.html", context)
