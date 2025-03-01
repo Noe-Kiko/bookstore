@@ -27,12 +27,12 @@
                                         <!-- Responsible for alerting user that information already exists -->
                                         <div class="heading_s1">
                                             <h1 class="mb-5">Create an Account</h1>
-                                            <p class="mb-30">Already have an account? <a href="page-login.html">Login</a></p>
+                                            <p class="mb-30">Already have an account? <a href="{% url 'userauths:sign-in' %}">Login</a></p>
                                         </div>
                                         <form method="post" method="POST">
-                                            <!-- Responsible creating a User Session (Provides Security) -->
+                                            <!-- Responsible creating a User Session (PREVENTS CROSS-SITE FORGERY [Security]) -->
                                             {% csrf_token %}
-                                            <!-- Responsible creating a User Session (Provides Security) -->
+                                            <!-- Responsible creating a User Session (PREVENTS CROSS-SITE FORGERY [Security]) -->
 
                                             <!-- Recieves/Retrieves User Information -->
                                             <div class="form-group">
