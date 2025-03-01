@@ -10,6 +10,6 @@ urlpatterns = [
 
     # We leave the bottom an empty string because we want the  
     # domain alone to direct us to the websites homepage
-    path("", index)
+    path("", index, name="index")
 
 ]

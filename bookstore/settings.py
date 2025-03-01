@@ -35,6 +35,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # add the django App Jazzmin for SuperUser
+    'jazzmin',
+
+    #Default DJango 3.2 apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +50,10 @@ INSTALLED_APPS = [
     # Note by Noe
     # Custom Apps
     'core', 
+
+    # djangos default admin page requires the use of username and password, 
+    # We want to make the sight more secure by requiring admins to login with EMAIL and password
+    'userauths',
 ]
 
 MIDDLEWARE = [
@@ -126,16 +134,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 #########################################################################
 # Written by Noe
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-MEDIA = 'media/'
+MEDIA = '/media/'
 
 # All media files will be sitting here, for example
 # product pictures will be stored here
@@ -146,3 +154,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Below is responsible for some design features in 
+# local machines admin page
+JAZZMIN_SETTINGS = {
+    'site_header': "Noe's Bookshop",
+    'site_brand': "You Buy, We Supply!",
+    'site_logo': 'assets/imgs/theme/superuser.png',
+    'site_copyright': "Noe's Bookshop",
+
+}
+
+
+AUTH_USER_MODEL = 'userauths.User'
