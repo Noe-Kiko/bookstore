@@ -12,6 +12,8 @@ from django.contrib.auth import logout
 from django.contrib import messages 
 
 from django.conf import settings
+# Fix for user login bug
+from userauths.models import User
 
 # What is the point of this variable? Well if you go to bookstore/settings.py 
 # you'll scroll down and find AUTH_USER_MODEL which is connected to "userauths.User"
@@ -67,23 +69,23 @@ def loginView(request):
         ######### PLEASE PUT IN A TRY-CATCH #########
         try:
             user = User.objects.get(email=email)
+            user = authenticate(request, email=email, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request, "You are logged in.")
+                return redirect("core:index")
+            else: 
+                messages.warning(request, "User Does Not Exist, create an account.")
+
         except:
             messages.warning(request, f"User with {email} doesn't exist!")
-
-        user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            messages.success(request, "You are logged in.")
-            return redirect("core:index")
-        else: 
-            messages.warning(request, "User Does Not Exist, create an account.")
 
     context = {
 
     }
 
-    return render(request, "userauths/sign-in.html", context)
+    return render(request, "userauths/sign-in.html")
 
 
 def logoutView(request):
