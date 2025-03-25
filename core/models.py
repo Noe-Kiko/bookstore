@@ -91,6 +91,7 @@ class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=30, alphabet="abcdefg12345")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=100, default="Product Title")
     image = models.ImageField(upload_to="user_directory_path", default="product.jpg")
     description = models.TextField(null = True, blank = True, default = "The Product ")
@@ -99,7 +100,6 @@ class Product(models.Model):
     coverType = models.TextField(null = True, blank = True, default = "Hardcover")
     tags = models.ForeignKey(Tags, on_delete=models.SET_NULL, null=True)
     product_status = models.CharField(choices=STATUS, max_length=10, default="in_review")
-
     status = models.BooleanField(default=True)
     in_stock = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
