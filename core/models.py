@@ -72,6 +72,7 @@ class Vendor(models.Model):
     address = models.CharField(max_length=100, default = "N/A")
     contact = models.CharField(max_length=100, default = "+1")
     chat_resp_time = models.CharField(max_length=100, default = "100")
+    authentic_rating = models.CharField(max_length=100, default = "N/A")
     shipping_on_time = models.CharField(max_length=100, default = "100%")
     vendor_rating = models.CharField(max_length=100, default = "100")
     days_return = models.CharField(max_length=100, default="30")
@@ -103,7 +104,8 @@ class Product(models.Model):
     ###  
     subject = models.CharField(max_length=100, default="N/A", null=True, blank=True)
     isbn = models.CharField(max_length=100, default="N/A", null=True, blank=True)
-    publishDate = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    publishDate = models.TextField(null = True, blank = True, default = "Enter todays date")
+    stock_count = models.CharField(max_length=100, default="N/A", null=True, blank=True)
     ###
     tags = models.ForeignKey(Tags, on_delete=models.SET_NULL, null=True)
     product_status = models.CharField(choices=STATUS, max_length=10, default="in_review")
