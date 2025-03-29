@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'taggit',
-    
+    'ckeditor',
 
     #################################################################################
     # Note by Noe
@@ -172,3 +172,20 @@ JAZZMIN_SETTINGS = {
 
 
 AUTH_USER_MODEL = 'userauths.User'
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono',
+        'code_snippet_theme': 'monokai',
+        'toolbar': 'all',
+        'extraPlugins': ','.join(
+            [
+                'codesnippets',
+                'widgets',
+                'dialogs'
+            ]
+        ),
+    }
+}

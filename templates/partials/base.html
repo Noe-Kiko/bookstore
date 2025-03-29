@@ -379,13 +379,11 @@
                                         <a href="shop-grid-right.html">Category <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             {% for c in categories %}
-                                            <li><a href="{% url 'core:category-product-list' c.cid%}">{{c.title}}/a></li>
+                                            <li><a href="{% url 'core:category-product-list' c.cid%}">{{c.title}}</a></li>
                                             {% endfor %}
                                             <hr>
-                                            <li><a href="{% url 'core:category-list' %}">All Categories/a></li>
-
-                                                </ul>
-                                            </li>
+                                            <li><a href="{% url 'core:category-list' %}">All Categories</a></li>
+                                            
                                         </ul>
                                     </li>
                                     <li>
