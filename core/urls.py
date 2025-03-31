@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review, search_view
+from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review, search_view, filter_product
 app_name = "core"
 
 urlpatterns = [
@@ -28,4 +28,5 @@ urlpatterns = [
     path("add-review/<pid>/", add_review, name="add-review"),
 
     path("search/", search_view, name="search"),
+    path("filter-products/", filter_product, name = "filter-product"),
 ]

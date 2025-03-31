@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishList, ProductImages, productReview, Address
 from django.db.models import Count, Avg
 from taggit.models import Tag
+from django.template.loader import render_to_string
 from core.forms import productReviewForm
 
 # Create your views here.
@@ -144,3 +145,18 @@ def search_view(request):
         "query":query,
     }
     return render(request, "core/search.html", context)
+
+def filter_product(request):
+    categories = request.GET.getlist("category[]")
+    vendors = request.GET.getlist("vendor[]")
+
+    products = Product.objects.filter(product_status="published").order_by(".-id").distinct()
+
+    if len(categories) > 0:
+        products = Product.objects.filter(category_id_in=categories).distinct()
+
+    if len(vendors) > 0:
+        products = Product.objects.filter(vendor_id_in=vendors).distinct()
+
+    data = render_to_string("core/async/product-list.html", {"products":products})
+    return JsonResponse({"data":data})

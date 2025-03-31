@@ -53,3 +53,36 @@ $("#commentForm").submit(function(e){
 
     })
 })
+
+
+// Whenever a user clicks on a checkbox 
+$(document).ready(function(){
+    $(".filter-checkbox").on("click", function(){
+        console.log("A checkbox has been clicked")
+
+        let filter_object = {}
+
+        $(".filter-checkbox").each(function(){
+            let filter_value = $(this).val()
+            let filter_key = $(this).data("filter")
+
+            filter_object[filter_key] = Array.from(document.querySelectorAll('input[data-filter=' + filter_key + ']:checked')).map(function(element){
+                return element_value
+            })
+        })
+        console.log("Filter Object is: ", filter_object)
+        $ajax({
+            url: '/filter-products',
+            data: filter_object,
+            dataType: 'json',
+            beforeSend: function(){
+                console.log("Sending Data")
+            },
+            success:function(response){
+                console.log(response);
+                console.log("Data filter successfully!")
+                $("#filtered-proudct").html(response.data)
+            }
+        })
+    })
+})
