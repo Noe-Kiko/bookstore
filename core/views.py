@@ -150,7 +150,13 @@ def filter_product(request):
     categories = request.GET.getlist("category[]")
     vendors = request.GET.getlist("vendor[]")
 
+    min_price = request.GET['min_price']
+    max_price = request.GET['max_price']
+
     products = Product.objects.filter(product_status="published").order_by(".-id").distinct()
+
+    products = products.filter(price__greaterthan=min_price)
+    products = products.filter(price__lessthan=max_price)
 
     if len(categories) > 0:
         products = Product.objects.filter(category_id_in=categories).distinct()
@@ -160,3 +166,29 @@ def filter_product(request):
 
     data = render_to_string("core/async/product-list.html", {"products":products})
     return JsonResponse({"data":data})
+
+def add_to_cart(request):
+    cart_product = {}
+
+    cart_product[str(request.GET('id'))] = {
+        'title':request.GET['title'],
+        'quantity':request.GET['quantity'],
+        'price':request.GET['price'],
+    }
+
+    if 'cart_data_obj' in request.session:
+        if str (request.GET[id]) in request.session['cart_data_obj']:
+            cart_data = request.session['cart_data_obj']
+            cart_data[str(request.GET['id'])]['qty'] = int(cart_product[str(request.GET['id'])]['quantity'])
+            cart_data.update(cart_data)
+            request.session['cart_data_obj'] = cart_data
+
+        else: 
+            cart_data = request.session['cart_data_obj']
+            cart_data.update(cart_product)
+            request.session['cart_data_obj'] = cart_data
+        
+    else: 
+        request.session['cart_data_obj'] = cart_product
+
+    return JsonResponse({"data":request.session["cart_data_obj"], "totalcartitems": len(request.session["cart_data_obj"])})

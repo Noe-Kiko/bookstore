@@ -57,10 +57,18 @@ $("#commentForm").submit(function(e){
 
 // Whenever a user clicks on a checkbox 
 $(document).ready(function(){
-    $(".filter-checkbox").on("click", function(){
+    $(".filter-checkbox, #price-filter-btn").on("click", function(){
         console.log("A checkbox has been clicked")
 
         let filter_object = {}
+
+        // its going to views.py to get "max_price"
+        let min_price = $("max_price").attr("min")
+        let max_price = $("max_price").val()
+
+        filter_object.min_price = min_price;
+        filter_object.max_price = max_price;
+
 
         $(".filter-checkbox").each(function(){
             let filter_value = $(this).val()
@@ -84,5 +92,68 @@ $(document).ready(function(){
                 $("#filtered-proudct").html(response.data)
             }
         })
+    })
+})
+
+// Responsible to tell user whether the price is possible or not 
+// Let me explain: If the minimum price on the entire shop is $2 and the user filters 
+// looking for a product for $1, they will be prompted a message on their browser telling them 
+// the range of prices for the filter slider to work
+
+$("#max_price").on("blur"), function(){
+    let min_price = $(this).attr("min")
+    let max_price = $(this).attr("max")
+    let current_price = $(this).val()
+
+
+    if (current_price < parseInt(min_price) || current_price > parseInt(max_price)) { 
+        min_price = Math.round(min_price * 100)/100
+        max_price = Math.round(max_price * 100)/100
+
+
+        alert("Price must be between $"+min_price + ' and $'+max_price)
+        $(this).val(min_price)
+        $("range").val(min_price)
+        $(this).focus()
+        return false
+        
+    }
+}
+
+// Cart functionality
+// Whenever the user clicks on the quantity field we're going to grab
+// the product id and the name of the product 
+
+$("#add-to-cart-btn").on("click", function(){
+    let quantity = $("#product-quantity").val()
+    let product_title = $(".product-title").val()
+    let product_id = $(".product-id").val()
+    // in product-detail.hmtl the price we see is a text field not val
+    let product_price = $("#current-product-price").text()
+
+    console.log("Quantity: ", quantity);
+    console.log("Title: ", product_title);
+    console.log("Price: ", product_price);
+    console.log("ID: ", product_id);
+    console.log("Current Element: ", this_val);
+
+    $.ajax({
+        url: 'add-to-cart',
+        data:{
+            'id': product_id, 
+            'quantity': quantity,
+            'title':product_title,
+            'price':product_price,
+
+        },
+        dataType: 'json',
+        beforeSend: function(response){
+            console.log("Adding Products to Cart...");
+        },
+        sucess:function(response){
+            this_val.html("Successfully Added Products to Cart")
+            console.log("Successfully Added Products to Cart");
+            $(".cart-items-count").text(response.totalcartitems)
+        }
     })
 })
