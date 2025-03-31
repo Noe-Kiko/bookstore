@@ -168,7 +168,7 @@ class CartOrderItems(models.Model):
 
 class productReview(models.Model):
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
-    product = models.ForeignKey(Product, on_delete = models.SET_NULL, null = True)
+    product = models.ForeignKey(Product, on_delete = models.SET_NULL, null = True, related_name = 'review')
     review = models.TextField()
     rating = models.IntegerField(choices=RATING, default=None)
     date = models.DateTimeField(auto_now_add=True)

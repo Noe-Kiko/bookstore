@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishList, ProductImages, productReview, Address
-from django.db.models import Count
+from django.db.models import Count, Avg
 from taggit.models import Tag
+from core.forms import productReviewForm
+
 # Create your views here.
 def index(request):
     # product = Product.objects.all().order_by("-id")
@@ -60,12 +62,31 @@ def product_detail_view(request, pid):
     product = Product.objects.get(pid=pid)
     products = Product.objects.filter(category=product.category).exclude(pid=pid)
 
+    reviews = productReview.objects.filter(product=product).order_by("-date")
+
+    # average reviews view
+    average_rating = productReview.objects.filter(product=product).aggregate(rating=Avg('rating'))
+
+    # Product review form
+    review_form = productReviewForm()
 
     p_image = product.p_images.all()
 
+    make_review = True
+    if request.user.is_authenticated:
+        user_review_count = productReview.objects.filter(user=request.user, product=product).count()
+
+        if user_review_count > 0:
+            make_review = False
+
+
     context = {
         "p":product,
+        'review_form': review_form,
+        'make_review':make_review,
         "p_image":p_image,
+        "average_rating": average_rating,
+        'reviews':reviews, 
         "products":products,
     }
     return render(request, "core/product-detail.html", context)
@@ -84,3 +105,42 @@ def tag_list(request, tag_slug=None):
     }
 
     return render(request, "core/tag.html", context)
+
+def add_review(request, pid):
+    product = Product.objects.get(pk=pid)
+    user = request.user
+
+    review = productReview.objects.create(
+        user=user, 
+        product=product,
+        review = request.POST['review'],
+        rating = request.POST['rating'],
+    )
+    context = {
+        'user': user.username, 
+        'review':request.POST['review'],
+        'rating':request.POST['rating'],
+    }
+
+    average_reviews = productReview.objects.filter(product=product).aggregate(rating=Avg("rating"))
+
+    return JsonResponse(
+        {
+        'bool': True, 
+        'context': context,
+        'average_reviews':average_reviews,
+        }
+    )
+
+
+# when searching, it's going to grab any product that contains the information the user inserted and will output the most latest added products
+def search_view(request):
+    query = request.GET.get("q")
+
+    products=Product.objects.filter(title__icontains=query).order_by("-date")
+
+    context = {
+        "products":products,
+        "query":query,
+    }
+    return render(request, "core/search.html", context)

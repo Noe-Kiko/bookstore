@@ -7,10 +7,14 @@
                 <div class="archive-header">
                     <div class="row align-items-center">
                         <div class="col-xl-3">
-                            <h1 class="mb-15">{{category.title}}</h1>
+                            {% if query %}
+                            <h1 class="mb-15">{{query}}</h1>
+                            {% else %}
+                            <h3 class="mb-15">Oops! You forgot to search</h3>
+                            {% endif %}
                             <div class="breadcrumb">
                                 <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                                <span></span> Shop <span></span> {{category.title}}
+                                <span></span> Shop <span></span> {{query}}
                             </div>
                         </div>
                         <!-- <div class="col-xl-9 text-end d-none d-xl-block">

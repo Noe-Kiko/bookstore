@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list
+from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review, search_view
 app_name = "core"
 
 urlpatterns = [
@@ -23,6 +23,9 @@ urlpatterns = [
     path("vendors/", vendor_list_view, name="vendor-list"),
     path("vendors/<vid>", vendor_detail_view, name="vendor-detail"),
 
-    path("products/tag/<slug:tag_slug>/", tag_list, name="tags")
+    path("products/tag/<slug:tag_slug>/", tag_list, name="tags"),
 
+    path("add-review/<pid>/", add_review, name="add-review"),
+
+    path("search/", search_view, name="search"),
 ]
