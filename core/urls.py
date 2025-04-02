@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart
+from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout_view
 app_name = "core"
 
 urlpatterns = [
@@ -34,10 +34,12 @@ urlpatterns = [
     path("add-to-cart/", add_to_cart, name = "add-to-cart"),
 
     # Cart Page
-    path("add-to-cart/",cart_view, name = "add=to-cart"),
+    path("cart/",cart_view, name = "cart"),
 
     # Used when deleting items from cart
     path("delete-from-cart/", delete_item_from_cart, name = ""),
 
-    path("update-cart/", update_cart, name = "update-cart")
+    path("update-cart/", update_cart, name = "update-cart"),
+
+    path("checkout/", checkout_view, name = "checkout"),
 ]

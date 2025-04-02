@@ -63,7 +63,7 @@ class Vendor(models.Model):
     vid = ShortUUIDField(unique=True, length=10, max_length=30, prefix="vendor", alphabet="abcdefg12345")
 
     title = models.CharField(max_length=100, default="Vendor name")
-    image = models.ImageField(upload_to="user_directory_path", default="vendor.jpg")
+    #image = models.ImageField(upload_to="user_directory_path", default="vendor.jpg")
     cover_image = models.ImageField(upload_to="user_directory_path", default="vendor.jpg")
 
     description = RichTextUploadingField(null = True, blank = True, default = "Describe yourself!")

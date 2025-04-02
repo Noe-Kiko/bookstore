@@ -8,7 +8,7 @@ from core.forms import productReviewForm
 from django.contrib import messages
 # Create your views here.
 def index(request):
-    # product = Product.objects.all().order_by("-id")
+    #products = Product.objects.all().order_by("-id")
     products = Product.objects.filter(product_status="published", featured = True)
     context = {
         "products":products
@@ -219,6 +219,7 @@ def delete_item_from_cart(request):
     cart_total_amount = 0
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session["cart_data_obj"].items():
+            # Below is responsible for incrementing price
             cart_total_amount = cart_total_amount + int(item['qty']) * float(item["price"])
 
     context = render_to_string("core/async/cart-list.html", {"cart_data":request.session["cart_data_obj"], "totalcartitems": len(request.session["cart_data_obj"]), "cart_total_amount":cart_total_amount})
@@ -249,3 +250,13 @@ def update_cart(request):
         "totalcartitems": len(request.session["cart_data_obj"]),
         "cart_total_amount": cart_total_amount
     })
+
+def checkout_view(request):
+    cart_total_amount = 0
+    if 'cart_data_obj' in request.session:
+        for p_id, item in request.session["cart_data_obj"].items():
+            # Below is responsible for incrementing price
+            cart_total_amount = cart_total_amount + int(item['qty']) * float(item["price"])
+
+    
+    return render(request, "core/checkout.html", {"cart_data":request.session["cart_data_obj"], "totalcartitems": len(request.session["cart_data_obj"]), "cart_total_amount":cart_total_amount})
