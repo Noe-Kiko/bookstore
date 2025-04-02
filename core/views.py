@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
+from requests import session
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishList, ProductImages, productReview, Address
 from django.db.models import Count, Avg
 from taggit.models import Tag
@@ -236,7 +237,7 @@ def update_cart(request):
     if "cart_data_obj" in request.session:
         if product_id in request.session["cart_data_obj"]:
             cart_data = request.session["cart_data_obj"]
-            cart_data[str(request.GET["id"])][qty] = product_qty
+            cart_data[str(request.GET["id"])]["qty"] = product_qty
             request.session["cart_data_obj"] = cart_data
 
     cart_total_amount = 0
