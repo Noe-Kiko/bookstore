@@ -186,7 +186,7 @@
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
-                            <form action="#" {% url 'core:search' %} method="GET">
+                            <form action={% url 'core:search' %} method="GET">
                                 <select class="select-active">
                                     <option>All Categories</option>
                                     <option>Milks and Dairies</option>
@@ -492,7 +492,7 @@
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="{% url "core:cart" %">
+                                <a class="mini-cart-icon" href="{% url "core:cart" %}">
                                     <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart.svg' %}" />
                                     <span class="pro-count white cart-items-count">{{request.session.cart_data_obj|length }}</span></span>
                                 </a>
