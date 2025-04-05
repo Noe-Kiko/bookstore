@@ -1,5 +1,7 @@
-from django.urls import path
-from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout_view
+from django.urls import path, include # We need inlcude for paypal integration
+from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view 
+from core.views import tag_list, add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout_view, paypalCompletedView, paypalFailedView
+
 app_name = "core"
 
 urlpatterns = [
@@ -37,9 +39,16 @@ urlpatterns = [
     path("cart/",cart_view, name = "cart"),
 
     # Used when deleting items from cart
-    path("delete-from-cart/", delete_item_from_cart, name = ""),
+    path("delete-from-cart/", delete_item_from_cart, name = "delete-from-cart"),
 
     path("update-cart/", update_cart, name = "update-cart"),
 
     path("checkout/", checkout_view, name = "checkout"),
+
+    # Paypals URL
+    path('paypal/', include('paypal.standard.ipn.urls')),
+
+    path('payment-completed/', paypalCompletedView, name="payment-completed"),
+
+    path('payment-failed/', paypalFailedView, name="payment-failed"),
 ]

@@ -16,10 +16,9 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{% static 'assets/css/plugins/slider-range.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
-    <!--DOES IT WORK?-->
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"> </script>
 </head>
 <body>
+    {% csrf_token %}
     <!-- Quick view -->
     <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -946,8 +945,24 @@
     <script src="{% static 'assets/js/plugins/jquery.theia.sticky.js' %}"></script>
     <script src="{% static 'assets/js/plugins/jquery.elevatezoom.js' %}"></script>
     <!-- Template  JS -->
-    <script src="{% static './assets/js/main.js' %}"></script>
-    <script src="{% static './assets/js/shop.js?' %}"></script>
-    <script src="{% static './assets/js/function.js?' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script src="{% static 'assets/js/shop.js' %}"></script>
+    <script>
+        // Define global URLs for AJAX calls
+        window.URLS = {
+            addToCart: "{% url 'core:add-to-cart' %}",
+            deleteFromCart: "{% url 'core:delete-from-cart' %}",
+            updateCart: "{% url 'core:update-cart' %}"
+        };
+    </script>
+    <script src="{% static 'assets/js/function.js' %}"></script>
+    <script>
+        // Add CSRF token to all AJAX requests
+        $.ajaxSetup({
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        });
+    </script>
 </body>
 </html>

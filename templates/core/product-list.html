@@ -125,7 +125,7 @@
                                                     <div class="caption">From: <strong id="slider-range-value1" class="text-brand"> {{min_max_price.price__min|floatformat:2}}</strong></div>
                                                     <div class="caption">To: <strong id="slider-range-value2" class="text-brand"> {{min_max_price.price_max|floatformat:2}}</strong></div>
                                                 </div>
-                                                <!--    -->>
+                                                <!--    -->
                                                 <input type = "number" name = "" value = "{{  min_max_price.price__min|floatformat:2  }}" id = "max_price" min = "{{min_max_price.price__min}}" max = "{{min_max_price.price__max}}" placeholder = "Current Price" onkeyup = "range.value=this.value">
                                             </div>
                                         </div>
@@ -228,7 +228,8 @@
                                             <input type = "hidden" value = "{{p.id}}" id = "product-quantity" class = "product-quantity-{{p.id}}">
                                             <input type = "hidden" class = "product-pid-{{p.id}}" value = "{{p.pid}}">
                                             <input type = "hidden" class = "product-image-{{p.pid}}" value = "{{p.image.url}}">
-                                            <input type = "hidden" class = "product-id-{{p.id}}" value = "{{p.title}}">
+                                            <input type="hidden" class="product-id-{{ p.id }}" value="{{ p.id }}">
+                                            <input type = "hidden" class = "product-title-{{p.id}}" value = "{{p.title}}">
                                             <button class="add add-to-cart-btn" data-index = "{{p.id}}" id = "add-to-cart-btn"><i class="fi-rs-shopping-cart mr-5"></i>Add</button>
                                         </div>
                                     </div>

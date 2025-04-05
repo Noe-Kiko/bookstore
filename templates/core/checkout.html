@@ -1,3 +1,5 @@
+{% extends 'partials/base.html' %}
+{% load static %}
 {% block content %}
     <main class="main">
         <div class="page-header breadcrumb-wrap">
@@ -662,7 +664,7 @@
                                         </td>
 
                                         <td>
-                                            <h5 class="text-brand">${% widthratio item.price 1 itme.qty %}</h5>
+                                            <h5 class="text-brand">${% widthratio item.price 1 item.qty %}</h5>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -692,7 +694,10 @@
                             <img class="mr-15" src="{% static 'assets/imgs/theme/icons/payment-master.svg' %}" alt="">
                             <img src="{% static 'assets/imgs/theme/icons/payment-zapper.svg' %}" alt="">
                         </div>
-                        <a href="#" class="btn btn-fill-out btn-block mt-30">Place an Order<i class="fi-rs-sign-out ml-15"></i></a>
+                        <div>
+                            {{paypal_payment_button.render}}
+                        </div>
+                        {% comment %} <a href="#" class="btn btn-fill-out btn-block mt-30">Place an Order<i class="fi-rs-sign-out ml-15"></i></a> {% endcomment %}
                     </div>
                 </div>
             </div>

@@ -57,6 +57,9 @@ INSTALLED_APPS = [
     # djangos default admin page requires the use of username and password, 
     # We want to make the sight more secure by requiring admins to login with EMAIL and password
     'userauths',
+    
+    # App to integrate paypal
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -170,6 +173,7 @@ JAZZMIN_SETTINGS = {
 
 }
 
+LOGIN_URL = "userauths/sign-in"
 
 AUTH_USER_MODEL = 'userauths.User'
 
@@ -189,3 +193,8 @@ CKEDITOR_CONFIGS = {
         ),
     }
 }
+
+
+PAYPAL_RECEIVER_EMAIL = 'noesandbox1@gmail.com' 
+
+PAYPAL_TEST = True

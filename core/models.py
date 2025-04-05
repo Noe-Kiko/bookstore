@@ -97,8 +97,8 @@ class Product(models.Model):
     title = models.CharField(max_length=100, default="Product Title")
     image = models.ImageField(upload_to="user_directory_path", default="product.jpg")
     description = RichTextUploadingField(null = True, blank = True, default = "Describe yourself!")
-    price = models.DecimalField(max_digits=9999999, decimal_places=2, default="9.99")
-    old_price= models.DecimalField(max_digits=9999999, decimal_places=2, default="5.99")
+    price = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
+    old_price = models.DecimalField(max_digits=9999999, decimal_places=2, default=5.99)
     coverType = models.TextField(null = True, blank = True, default = "Hardcover")
     ###  
     subject = models.CharField(max_length=100, default="N/A", null=True, blank=True)
@@ -141,7 +141,7 @@ class ProductImages(models.Model):
 
 class CartOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=9999999, decimal_places=2, default="9.99")
+    price = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
     paid_status = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
     product_status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing")
@@ -156,8 +156,8 @@ class CartOrderItems(models.Model):
     item = models.CharField(max_length=200)
     image = models.CharField(max_length=200)
     quantity = models.IntegerField(default=0)
-    price = models.DecimalField(max_digits=9999999, decimal_places=2, default="9.99")
-    total = models.DecimalField(max_digits=9999999, decimal_places=2, default="9.99")
+    price = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
+    total = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
 
     class Meta:
         verbose_name_plural = "Cart Order Items"
