@@ -199,11 +199,6 @@ if (typeof jQuery === 'undefined') {
             let product_quantity = $(".product-qty-" + product_id).val();
             let row = this_val.closest('tr');
 
-            console.log("Updating cart:", {
-                id: product_id,
-                qty: product_quantity
-            });
-
             $.ajax({
                 url: '/update-cart/',
                 data: {
@@ -217,12 +212,23 @@ if (typeof jQuery === 'undefined') {
                 success: function(response){
                     this_val.css('opacity', '1');
                     
-                    // Update the subtotal for this row
-                    row.find('[data-title="Price"] .text-brand').text("$" + (parseFloat(response.cart_data[product_id].price) * parseInt(product_quantity)).toFixed(2));
-                    
-                    // Update cart totals
+                    // Update the cart item count
                     $(".cart-items-count").text(response.totalcartitems);
-                    $(".cart_total_amount").text("$" + response.cart_total_amount);
+                    
+                    // Update the subtotal for this row
+                    row.find('.text-brand').text('$' + response.item_total);
+                    
+                    // Update the cart total amount
+                    $(".cart_total_amount").text('$' + response.cart_total_amount);
+                    
+                    // If cart is empty, reload the page
+                    if (response.totalcartitems === 0) {
+                        location.reload();
+                    }
+                },
+                error: function(){
+                    this_val.css('opacity', '1');
+                    console.error("Error updating cart");
                 }
             });
         });

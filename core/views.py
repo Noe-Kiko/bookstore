@@ -251,21 +251,19 @@ def update_cart(request):
             request.session["cart_data_obj"] = cart_data
 
     cart_total_amount = 0
+    item_total = 0
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session["cart_data_obj"].items():
             price = float(clean_price(item['price']))
             cart_total_amount += int(item['qty']) * price
-
-    context = render_to_string("core/async/cart-list.html", {
-        "cart_data": request.session["cart_data_obj"],
-        "totalcartitems": len(request.session["cart_data_obj"]),
-        "cart_total_amount": cart_total_amount
-    })
+            if p_id == product_id:
+                item_total = int(item['qty']) * price
     
     return JsonResponse({
-        "data": context,
+        "status": "success",
         "totalcartitems": len(request.session["cart_data_obj"]),
-        "cart_total_amount": cart_total_amount
+        "cart_total_amount": "{:.2f}".format(cart_total_amount),
+        "item_total": "{:.2f}".format(item_total)
     })
 
 @login_required
