@@ -124,7 +124,8 @@ if (typeof jQuery === 'undefined') {
             let product_id = this_val.attr("data-index");
             let quantity = $(".product-quantity-" + product_id).val() || 1;
             let product_title = $(".product-title-" + product_id).val();
-            let product_price = $(".current-product-price").text().replace('$', '').trim();
+            // Get price from the closest product card
+            let product_price = this_val.closest('.product-cart-wrap').find('.current-product-price').text().replace('$', '').trim();
             let product_pid = $(".product-pid-" + product_id).val();
             let product_image = $(".product-image-" + product_pid).val();
 
