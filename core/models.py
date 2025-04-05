@@ -34,7 +34,7 @@ RATING= {
     ( 4, "★★★★☆"),
     ( 5, "★★★★★"),
 }
-
+########################
 # Create your models here.
 def user_directory_path(instance, filename):
     return 'user_{0}/{1}'.format(instance.user.id, filename)
@@ -55,9 +55,11 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+########################
 class Tags(models.Model):
     pass
-    
+
+########################
 # Sort of like Amazon and TikTok shop where there are vendors to sell items too! 
 class Vendor(models.Model):
     vid = ShortUUIDField(unique=True, length=10, max_length=30, prefix="vendor", alphabet="abcdefg12345")
@@ -68,17 +70,17 @@ class Vendor(models.Model):
 
     description = RichTextUploadingField(null = True, blank = True, default = "Describe yourself!")
     
-    address = models.CharField(max_length=100, default = "N/A")
-    contact = models.CharField(max_length=100, default = "+1")
+    address = models.CharField(max_length=100, default = "Vendor's Address")
+    contact = models.CharField(max_length=100, default = "(732) - 123 - 4567")
     chat_resp_time = models.CharField(max_length=100, default = "100")
     authentic_rating = models.CharField(max_length=100, default = "N/A")
     shipping_on_time = models.CharField(max_length=100, default = "100%")
     vendor_rating = models.CharField(max_length=100, default = "100")
     days_return = models.CharField(max_length=100, default="30")
     warranty_period = models.CharField(max_length=100, default="30")
-
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
     class Meta:
         verbose_name_plural = "Vendors"
 
@@ -88,7 +90,7 @@ class Vendor(models.Model):
     def __str__(self):
         return self.title
     
-
+########################
 class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=30, alphabet="abcdefg12345")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -97,15 +99,19 @@ class Product(models.Model):
     title = models.CharField(max_length=100, default="Product Title")
     image = models.ImageField(upload_to="user_directory_path", default="product.jpg")
     description = RichTextUploadingField(null = True, blank = True, default = "Describe yourself!")
-    price = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
-    old_price = models.DecimalField(max_digits=9999999, decimal_places=2, default=5.99)
+
+    ###### CHANGED DEFAULT FROM FLOAT TO STR #####
+    price = models.DecimalField(max_digits=10, decimal_places=2, default="9.99")
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, default="5.99")
+    ###### CHANGED DEFAULT FROM FLOAT TO STR #####
+    
     coverType = models.TextField(null = True, blank = True, default = "Hardcover")
-    ###  
+   
     subject = models.CharField(max_length=100, default="N/A", null=True, blank=True)
     isbn = models.CharField(max_length=100, default="N/A", null=True, blank=True)
     publishDate = models.TextField(null = True, blank = True, default = "Enter todays date")
     stock_count = models.CharField(max_length=100, default="N/A", null=True, blank=True)
-    ###
+    
     tags = TaggableManager(blank=True)
     product_status = models.CharField(choices=STATUS, max_length=10, default="in_review")
     status = models.BooleanField(default=True)
@@ -129,6 +135,7 @@ class Product(models.Model):
     def getPercentage(self):
          new_price = (self.price/ self.old_price) * 100
 
+########################
 # Gives the ability to add MULTIPLE images to a single product
 class ProductImages(models.Model):
     images = models.ImageField(upload_to="product-images", default="product.jpg")
@@ -138,7 +145,7 @@ class ProductImages(models.Model):
     class Meta:
             verbose_name_plural = "Product Images"
 
-
+########################
 class CartOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
@@ -149,6 +156,7 @@ class CartOrder(models.Model):
     class Meta:
         verbose_name_plural = "Cart Order"
 
+########################
 class CartOrderItems(models.Model):
     order = models.ForeignKey(CartOrder, on_delete=models.CASCADE)
     invoice_no = models.CharField(max_length=200)
@@ -156,16 +164,16 @@ class CartOrderItems(models.Model):
     item = models.CharField(max_length=200)
     image = models.CharField(max_length=200)
     quantity = models.IntegerField(default=0)
-    price = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
-    total = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
+    price = models.DecimalField(max_digits=12, decimal_places=2, default="0.00")
+    total = models.DecimalField(max_digits=12, decimal_places=2, default="0.00")
 
     class Meta:
         verbose_name_plural = "Cart Order Items"
 
-    def order_image(self):
-        return mark_safe('<img sec= "/media/%s" width="50" height="50" />' % (self.image))
+    def order_img(self):
+        return mark_safe('<img src="/media/%s" width="50" height="50" />' % (self.image))
     
-
+########################
 class productReview(models.Model):
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
     product = models.ForeignKey(Product, on_delete = models.SET_NULL, null = True, related_name = 'review')
@@ -183,7 +191,7 @@ class productReview(models.Model):
          return self.rating
     
 
-
+########################
 class wishList(models.Model):
     user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
     product = models.ForeignKey(Product, on_delete = models.SET_NULL, null = True)
@@ -195,10 +203,12 @@ class wishList(models.Model):
     def __str__(self):
             return self.product.title
 
+########################
 class Address(models.Model):
-    user = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
-    address = models.CharField(max_length=100, null = True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    mobile = models.CharField(max_length=300, null=True)
+    address = models.CharField(max_length=100, null=True)
     status = models.BooleanField(default=False)
-    
+
     class Meta:
         verbose_name_plural = "Address"
