@@ -179,11 +179,33 @@ if (typeof jQuery === 'undefined') {
                     this_val.css('opacity', '0.5');
                 },
                 success: function(response){
+                    console.log("Delete response:", response);
                     this_val.css('opacity', '1');
                     row.fadeOut(400, function() {
                         row.remove();
                         $(".cart-items-count").text(response.totalcartitems);
-                        $(".cart_total_amount").text("$" + response.cart_total_amount);
+                        
+                        // Update the cart summary section
+                        let cartSummary = `
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="fw-bold">Tax</p>
+                                <p>$0.00</p>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="fw-bold">Shipping</p>
+                                <p>$0.00</p>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="fw-bold">Discount</p>
+                                <p>$0.00</p>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="fw-bold">Total</p>
+                                <p>$${parseFloat(response.cart_total_amount).toFixed(2)}</p>
+                            </div>
+                        `;
+                        $(".cart-totals .table-responsive div").html(cartSummary);
+                        
                         if (response.totalcartitems === 0) {
                             location.reload();
                         }
@@ -210,25 +232,46 @@ if (typeof jQuery === 'undefined') {
                     this_val.css('opacity', '0.5');
                 },
                 success: function(response){
+                    console.log("Update response:", response);
                     this_val.css('opacity', '1');
                     
                     // Update the cart item count
                     $(".cart-items-count").text(response.totalcartitems);
                     
                     // Update the subtotal for this row
-                    row.find('.text-brand').text('$' + response.item_total);
+                    row.find('.text-brand').text('$' + parseFloat(response.item_total).toFixed(2));
                     
-                    // Update the cart total amount
-                    $(".cart_total_amount").text('$' + response.cart_total_amount);
+                    // Update the cart summary section
+                    let cartSummary = `
+                        <div class="d-flex justify-content-between mb-2">
+                            <p class="fw-bold">Tax</p>
+                            <p>$0.00</p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <p class="fw-bold">Shipping</p>
+                            <p>$0.00</p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <p class="fw-bold">Discount</p>
+                            <p>$0.00</p>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <p class="fw-bold">Total</p>
+                            <p>$${parseFloat(response.cart_total_amount).toFixed(2)}</p>
+                        </div>
+                    `;
+                    $(".cart-totals .table-responsive div").html(cartSummary);
                     
                     // If cart is empty, reload the page
                     if (response.totalcartitems === 0) {
                         location.reload();
                     }
                 },
-                error: function(){
+                error: function(xhr, status, error){
                     this_val.css('opacity', '1');
-                    console.error("Error updating cart");
+                    console.error("Error updating cart:", error);
+                    console.error("Status:", status);
+                    console.error("Response:", xhr.responseText);
                 }
             });
         });
