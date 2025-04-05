@@ -167,6 +167,7 @@ if (typeof jQuery === 'undefined') {
         $(document).on("click", ".delete-product", function(){
             let product_id = $(this).attr("data-product");
             let this_val = $(this);
+            let row = this_val.closest('tr');
 
             $.ajax({
                 url: '/delete-from-cart/',
@@ -175,12 +176,18 @@ if (typeof jQuery === 'undefined') {
                 },
                 dataType: 'json',
                 beforeSend: function(){
-                    this_val.hide();
+                    this_val.css('opacity', '0.5');
                 },
                 success: function(response){
-                    this_val.show();
-                    $(".cart-items-count").text(response.totalcartitems);
-                    $("#cart-list").html(response.data);
+                    this_val.css('opacity', '1');
+                    row.fadeOut(400, function() {
+                        row.remove();
+                        $(".cart-items-count").text(response.totalcartitems);
+                        $(".cart_total_amount").text("$" + response.cart_total_amount);
+                        if (response.totalcartitems === 0) {
+                            location.reload();
+                        }
+                    });
                 }
             });
         });
@@ -190,6 +197,7 @@ if (typeof jQuery === 'undefined') {
             let this_val = $(this);
             let product_id = this_val.attr("data-product");
             let product_quantity = $(".product-qty-" + product_id).val();
+            let row = this_val.closest('tr');
 
             console.log("Updating cart:", {
                 id: product_id,
@@ -204,17 +212,17 @@ if (typeof jQuery === 'undefined') {
                 },
                 dataType: 'json',
                 beforeSend: function(){
-                    this_val.hide();
+                    this_val.css('opacity', '0.5');
                 },
                 success: function(response){
-                    this_val.show();
+                    this_val.css('opacity', '1');
+                    
+                    // Update the subtotal for this row
+                    row.find('[data-title="Price"] .text-brand').text("$" + (parseFloat(response.cart_data[product_id].price) * parseInt(product_quantity)).toFixed(2));
+                    
+                    // Update cart totals
                     $(".cart-items-count").text(response.totalcartitems);
-                    $("#cart-list").html(response.data);
-                    location.reload();
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error updating cart:", error);
-                    this_val.show();
+                    $(".cart_total_amount").text("$" + response.cart_total_amount);
                 }
             });
         });
