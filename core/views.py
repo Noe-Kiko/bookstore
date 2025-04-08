@@ -315,16 +315,34 @@ def paypalFailedView(request):
 @login_required
 def dashboard(request):
     orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    address = Address.objects.filter(user=request.user)
+
+    # Will grab the user's frontend input inside of the dashboard
+    if request.method == "POST":
+        address = request.POST.get("address")
+        mobile = request.POST.get("mobile")
+
+        newAddress = Address.objects.create(
+            user=request.user,
+            address=address,
+            mobile=mobile
+        )
+        messages.success(request, "Address saved!")
+        return redirect("core:dashboard")
+    
     context = {
-        "orders":orders
+        "orders":orders,
+        "address":address,
     }
     return render(request, 'core/dashboard.html', context)
+
+
 
 def orderDetail(request, id):
      orders = CartOrder.objects.get(user=request.user, id=id)
      orderItems = CartOrderItems.objects.filter(order=order)
 
      context = {
-         "orderItems":orderItems
+         "orderItems":orderItems,
      }
      return render(request, "core/order-detail.html")
