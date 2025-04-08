@@ -311,3 +311,20 @@ def paypalCompletedView(request):
 @login_required
 def paypalFailedView(request):
     return render(request, 'core/payment-failed.html')
+
+@login_required
+def dashboard(request):
+    orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    context = {
+        "orders":orders
+    }
+    return render(request, 'core/dashboard.html', context)
+
+def orderDetail(request, id):
+     orders = CartOrder.objects.get(user=request.user, id=id)
+     orderItems = CartOrderItems.objects.filter(order=order)
+
+     context = {
+         "orderItems":orderItems
+     }
+     return render(request, "core/order-detail.html")
