@@ -275,7 +275,34 @@ if (typeof jQuery === 'undefined') {
                 }
             });
         });
+
+
+        
     })
+
+    // Make address default
+    $(document).on("click", ".make-default-address", function () {
+        let id = $(this).attr("data-address-id")
+        let this_val = $(this)
+
+        $.ajax({
+            url: "/make-default-address/",
+            data: {
+                "id": id
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.boolean == true) {
+                    $(".check").hide()
+                    $(".action_btn").show()
+                    
+                    $(".check" + id).show()
+                    $(".button" + id).hide()
+                }
+            }
+        })
+    })
+
 
     // Responsible to tell user whether the price is possible or not 
     // Let me explain: If the minimum price on the entire shop is $2 and the user filters 

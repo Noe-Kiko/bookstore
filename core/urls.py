@@ -1,7 +1,7 @@
 from django.urls import path, include # We need inlcude for paypal integration
 from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view 
 from core.views import tag_list, add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout_view
-from core.views import paypalCompletedView, paypalFailedView, dashboard, orderDetail
+from core.views import paypalCompletedView, paypalFailedView, dashboard, orderDetail, defaultAddress
 
 app_name = "core"
 
@@ -56,4 +56,7 @@ urlpatterns = [
     path('dashboard/', dashboard, name="dashboard"),
 
     path('dashboard/order/<int:id>', orderDetail, name="order-detail"),
+
+    path("make-default-address/", defaultAddress , name="make-default-address"),
+
 ]

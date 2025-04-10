@@ -297,8 +297,14 @@ def checkout_view(request):
             price = clean_price(item['price'])
             cart_total_amount = cart_total_amount + int(item['qty']) * float(price)
 
-    
-    return render(request, "core/checkout.html", {"cart_data":request.session["cart_data_obj"], "totalcartitems": len(request.session["cart_data_obj"]), "cart_total_amount":cart_total_amount, "paypal_payment_button":paypal_payment_button})
+    try: 
+        activeAddress = Address.objects.get(user=request.user, status=True)
+    except: 
+        messages.warning(request, "You have more than one address activated")
+        activeAddress = None
+        
+    return render(request, "core/checkout.html", {"cart_data":request.session["cart_data_obj"], "totalcartitems": len(request.session["cart_data_obj"]), 
+                                    "cart_total_amount":cart_total_amount, "paypal_payment_button":paypal_payment_button, "activeAddress":activeAddress})
 
 @login_required
 def paypalCompletedView(request):
@@ -346,3 +352,12 @@ def orderDetail(request, id):
          "orderItems":orderItems,
      }
      return render(request, "core/order-detail.html")
+
+def defaultAddress(request):
+    id = request.GET['id']
+    
+    # Will make all other addresses deactivated (False)
+    Address.objects.update(status=False)
+
+    Address.objects.filter(id=id).update(status=True)
+    return JsonResponse({"boolean":True})
