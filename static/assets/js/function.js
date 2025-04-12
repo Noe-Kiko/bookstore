@@ -124,10 +124,19 @@ if (typeof jQuery === 'undefined') {
             let product_id = this_val.attr("data-index");
             let quantity = $(".product-quantity-" + product_id).val() || 1;
             let product_title = $(".product-title-" + product_id).val();
-            // Get price from the closest product card
-            let product_price = this_val.closest('.product-cart-wrap').find('.current-product-price').text().replace('$', '').trim();
+            
+            // Modified to work with wishlist page
+            let product_price;
+            // Check if we're on the wishlist page
+            if ($("#wishlist-list").length) {
+                product_price = $(".current-product-price-" + product_id).text().trim();
+            } else {
+                // Original behavior for other pages
+                product_price = this_val.closest('.product-cart-wrap').find('.current-product-price').text().replace('$', '').trim();
+            }
+            
             let product_pid = $(".product-pid-" + product_id).val();
-            let product_image = $(".product-image-" + product_pid).val();
+            let product_image = $(".product-image-" + product_id).val();
 
             console.log("Adding to cart:", {
                 id: product_id,
@@ -280,7 +289,7 @@ if (typeof jQuery === 'undefined') {
         
     })
 
-    // Make address default
+    // Javascript to allow user to make address default in their dashboard
     $(document).on("click", ".make-default-address", function () {
         let id = $(this).attr("data-address-id")
         let this_val = $(this)
@@ -302,6 +311,34 @@ if (typeof jQuery === 'undefined') {
             }
         })
     })
+
+    // Javascript to allow user to add items into their wishlist
+    $(document).on("click", ".add-to-wishlist", function () {
+        let product_id = $(this).attr("data-product-item")
+        let this_val = $(this)
+
+
+        console.log("PRoduct ID IS", product_id);
+
+        $.ajax({
+            url: "/add-to-wishlist/",
+            data: {
+                "id": product_id
+            },
+            dataType: "json",
+            beforeSend: function () {
+                console.log("Adding to wishlist...")
+            },
+            success: function (response) {
+                // this_val.html("✓")
+                this_val.html("<i class='fas fa-heart text-danger'></i>")
+                if (response.bool === true) {
+                    console.log("Added to wishlist...");
+                }
+            }
+        })
+    })
+
 
 
     // Responsible to tell user whether the price is possible or not 

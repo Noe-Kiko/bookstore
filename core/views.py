@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
-from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishList, ProductImages, productReview, Address
+from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address
 from django.db.models import Count, Avg
 from taggit.models import Tag
 from django.template.loader import render_to_string
@@ -302,7 +302,7 @@ def checkout_view(request):
     except: 
         messages.warning(request, "You have more than one address activated")
         activeAddress = None
-        
+
     return render(request, "core/checkout.html", {"cart_data":request.session["cart_data_obj"], "totalcartitems": len(request.session["cart_data_obj"]), 
                                     "cart_total_amount":cart_total_amount, "paypal_payment_button":paypal_payment_button, "activeAddress":activeAddress})
 
@@ -361,3 +361,38 @@ def defaultAddress(request):
 
     Address.objects.filter(id=id).update(status=True)
     return JsonResponse({"boolean":True})
+
+
+#########   WISHLIST     #########
+@login_required
+def wishlistView(request):
+    wishlist = wishListModel.objects.all()
+    context = {
+        "w":wishlist
+    }
+    return render(request, "core/wishlist.html", context)
+
+def addToWishList(request):
+    product_id = request.GET['id']
+    product = Product.objects.get(id=product_id)
+    print("product id is:" + product_id)
+
+    context = {}
+
+    wishlist_count = wishListModel.objects.filter(product=product, user=request.user).count()
+    print(wishlist_count)
+
+    if wishlist_count > 0:
+        context = {
+            "bool": True
+        }
+    else:
+        new_wishlist = wishListModel.objects.create(
+            user=request.user,
+            product=product,
+        )
+        context = {
+            "bool": True
+        }
+
+    return JsonResponse(context)

@@ -113,8 +113,17 @@
                                                         <input type="hidden" value="1" class="product-quantity-{{p.id}}">
                                                         <input type="hidden" class="product-pid-{{p.id}}" value="{{p.pid}}">
                                                         <input type="hidden" class="product-image-{{p.pid}}" value="{{p.image.url}}">
+                                                        <input type="hidden" class="product-pid-{{p.id}}" value="{{p.id}}">
                                                         <input type="hidden" class="product-title-{{p.id}}" value="{{p.title}}">
-                                                        <button class="add add-to-cart-btn" data-index="{{p.id}}"><i class="fi-rs-shopping-cart mr-5"></i>Add</button>
+
+                                                        <!-- DIV Reponsible for adding to wishlist -->
+                                                        <div class="d-flex">
+                                                            <button class="add add-to-cart-btn" data-index="{{p.id}}"><i class="fi-rs-shopping-cart mr-5"></i>Add</button>
+                                                            <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i
+                                                            class="fi-rs-heart" style="fill: aqua;"></i></button>
+                                                        </div>
+                                                        <!-- DIV Reponsible for adding to wishlist -->
+
                                                     </div>
                                                 </div>
                                             </div>
