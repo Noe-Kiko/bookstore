@@ -11,6 +11,10 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.forms import PayPalPaymentsForm
 from django.contrib.auth.decorators import login_required
+# added serializers for wishlist inorder for function.js remove wishlist function/feature to work properly
+# without the use of serializers will cause tons of issues with django querysets. 
+from django.core import serializers
+from userauths.models import Profile
 
 # Create your views here.
 def index(request):
@@ -320,9 +324,12 @@ def paypalFailedView(request):
 
 @login_required
 def dashboard(request):
-    orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    orderList = CartOrder.objects.filter(user=request.user).order_by("-id")
     address = Address.objects.filter(user=request.user)
 
+    # Get or create the profile for this user
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
+    
     # Will grab the user's frontend input inside of the dashboard
     if request.method == "POST":
         address = request.POST.get("address")
@@ -337,7 +344,8 @@ def dashboard(request):
         return redirect("core:dashboard")
     
     context = {
-        "orders":orders,
+        "user_profile":user_profile,
+        "orderList":orderList,
         "address":address,
     }
     return render(request, 'core/dashboard.html', context)
@@ -396,3 +404,17 @@ def addToWishList(request):
         }
 
     return JsonResponse(context)
+
+def removeFromWishlist(request):
+    pid = request.GET['id']
+    wishlist = wishListModel.objects.filter(user=request.user)
+    wishlist_d = wishListModel.objects.get(id=pid)
+    delete_product = wishlist_d.delete()
+    
+    context = {
+        "bool":True,
+        "w":wishlist
+    }
+    wishlist_json = serializers.serialize('json', wishlist)
+    t = render_to_string('core/async/wishlist-list.html', context)
+    return JsonResponse({'data':t,'w':wishlist_json})

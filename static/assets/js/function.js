@@ -339,6 +339,33 @@ if (typeof jQuery === 'undefined') {
         })
     })
 
+    // We can't forget about REMOVING products from wishlist 
+    // Javascript below is feature to remove from wishlist
+    $(document).on("click", ".delete-wishlist-product", function () {
+        let wishlist_id = $(this).attr("data-wishlist-product")
+        let this_val = $(this)
+
+        console.log("wishlist id is:", wishlist_id);
+
+        $.ajax({
+            url: "/remove-from-wishlist/",
+            data: {
+                "id": wishlist_id
+            },
+            dataType: "json",
+            beforeSend: function () {
+                console.log("Deleting product from wishlist...");
+            },
+            success: function (response) {
+                $("#wishlist-list").html(response.data)
+            },
+            error: function(xhr, status, error) {
+                console.error("Error removing from wishlist:", error);
+                console.log(xhr.responseText);
+            }
+        })
+    })
+
 
 
     // Responsible to tell user whether the price is possible or not 

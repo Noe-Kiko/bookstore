@@ -1,7 +1,7 @@
 from django.urls import path, include # We need inlcude for paypal integration
 from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view 
 from core.views import tag_list, add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout_view
-from core.views import paypalCompletedView, paypalFailedView, dashboard, orderDetail, defaultAddress, wishlistView, addToWishList
+from core.views import paypalCompletedView, paypalFailedView, dashboard, orderDetail, defaultAddress, wishlistView, addToWishList, removeFromWishlist
 
 app_name = "core"
 
@@ -62,4 +62,6 @@ urlpatterns = [
     path ("wishlist/", wishlistView, name="wishlist"),
 
     path("add-to-wishlist/", addToWishList, name="add-to-wishlist"), 
+
+    path("remove-from-wishlist/", removeFromWishlist, name="remove-from-wishlist"), 
 ]
