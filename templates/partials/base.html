@@ -123,7 +123,7 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
                             <ul>
-                                <li><a href="page-about.htlm">About Us</a></li>
+                                <li><a href="page-about.html">About Us</a></li>
                                 <li><a href="page-account.html">My Account</a></li>
                                 <li><a href="{% url 'core:wishlist' %}">Wishlist</a></li>
                                 <li><a href="shop-order.html">Order Tracking</a></li>
@@ -453,7 +453,7 @@
                                         <a href="#">Pages <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             <li><a href="page-about.html">About Us</a></li>
-                                            <li><a href="page-contact.html">Contact</a></li>
+                                            <li><a href="{% url 'core:contact' %}">Contact</a></li>
                                             <li><a href="page-account.html">My Account</a></li>
                                             <li><a href="page-login.html">Login</a></li>
                                             <li><a href="page-register.html">Register</a></li>
@@ -466,7 +466,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="page-contact.html">Contact</a>
+                                        <a href="{% url 'core:contact' %}">Contact</a>
                                     </li>
                                 </ul>
                             </nav>
@@ -657,7 +657,7 @@
                                 <a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="page-about.html">About Us</a></li>
-                                    <li><a href="page-contact.html">Contact</a></li>
+                                    <li><a href="{% url 'core:contact' %}">Contact</a></li>
                                     <li><a href="page-account.html">My Account</a></li>
                                     <li><a href="page-login.html">Login</a></li>
                                     <li><a href="page-register.html">Register</a></li>
@@ -684,7 +684,7 @@
                 </div>
                 <div class="mobile-header-info-wrap">
                     <div class="single-mobile-header-info">
-                        <a href="page-contact.html"><i class="fi-rs-marker"></i> Our location </a>
+                        <a href="{% url 'core:contact' %}"><i class="fi-rs-marker"></i> Our location </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="page-login.html"><i class="fi-rs-user"></i>Log In / Sign Up </a>

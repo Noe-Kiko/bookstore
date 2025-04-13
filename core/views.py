@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 # added serializers for wishlist inorder for function.js remove wishlist function/feature to work properly
 # without the use of serializers will cause tons of issues with django querysets. 
 from django.core import serializers
-from userauths.models import Profile
+from userauths.models import Profile, ContactUs
 
 # Create your views here.
 def index(request):
@@ -418,3 +418,29 @@ def removeFromWishlist(request):
     wishlist_json = serializers.serialize('json', wishlist)
     t = render_to_string('core/async/wishlist-list.html', context)
     return JsonResponse({'data':t,'w':wishlist_json})
+
+def contact(request):
+    return render(request, "core/contact.html")
+
+
+def ajax_contact_form(request):
+    full_name = request.POST.get('full_name')
+    email = request.POST.get('email')
+    phone = request.POST.get('phone')
+    subject = request.POST.get('subject')
+    message = request.POST.get('message')
+
+    contact = ContactUs.objects.create(
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        subject=subject,
+        message=message,
+    )
+
+    data = {
+        "bool": True,
+        "message": "Message Sent Successfully"
+    }
+
+    return JsonResponse({"data":data})

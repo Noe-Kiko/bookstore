@@ -19,6 +19,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
+# Profile Model
 class Profile(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE) # Whenever a user get's deleted, we want to delete their profile
     image = models.ImageField(upload_to="image")
@@ -29,3 +30,20 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.full_Name
+    
+# Contact Us Model 
+# We will use this for a contact.html page
+# This is where users will contact the website's admin and they have to 
+class ContactUs(models.Model):
+    full_name = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    phone = models.CharField(max_length=200) 
+    subject = models.CharField(max_length=200) 
+    message = models.TextField()
+
+    class Meta:
+        verbose_name = "Contact Us"
+        verbose_name_plural = "Contact Us"
+
+    def __str__(self):
+        return self.full_name
