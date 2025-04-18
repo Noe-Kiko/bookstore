@@ -1,6 +1,6 @@
 # Responsible for redirecting users to other pages and rendering the pages
 from django.shortcuts import redirect, render
-from userauths.forms import UserRegistrationForm
+from userauths.forms import UserRegistrationForm, ProfileForm
 
 # Allow user to be logged in automatically into site if signed up
 from django.contrib.auth import authenticate, login
@@ -13,7 +13,7 @@ from django.contrib import messages
 
 from django.conf import settings
 # Fix for user login bug
-from userauths.models import User
+from userauths.models import User, Profile as ProfileModel
 
 # What is the point of this variable? Well if you go to bookstore/settings.py 
 # you'll scroll down and find AUTH_USER_MODEL which is connected to "userauths.User"
@@ -84,3 +84,36 @@ def logoutView(request):
       logout(request)
       messages.success(request, "You logged out.")
       return redirect("userauths:sign-in")
+
+def profileUpdate(request):
+    profile = ProfileModel.objects.get(user=request.user)
+    if request.method == "POST":
+
+        '''
+        It's important that we request for POST and Files because we are dealing with user text 
+        and user profile image.
+
+            Explanation: 
+            request.POST for text
+            resquest.FILES for iamge
+        '''
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            # Give user capability to make changes in update profile page
+            new_form = form.save(commit=False)
+            # Ensure that profile is assigned to the correct user 
+            new_form.user = request.user
+            # Saves any changes to the database
+            new_form.save()
+            messages.success(request, "Profile Updated Successfully.")
+            # Redirect them back to the original dashboard
+            return redirect("core:dashboard")
+    else:
+        form = ProfileForm(instance=profile)
+
+    context = {
+        "form": form,
+        "profile": profile,
+    }
+
+    return render(request, "userauths/profile-edit.html", context)

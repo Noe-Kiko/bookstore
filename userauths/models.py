@@ -6,6 +6,8 @@
 #######################################################################################################
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+
 
 # UserModel 
 class User(AbstractUser):
@@ -21,15 +23,17 @@ class User(AbstractUser):
     
 # Profile Model
 class Profile(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE) # Whenever a user get's deleted, we want to delete their profile
-    image = models.ImageField(upload_to="image")
-    full_Name = models.CharField(max_length=50, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="image", null=True, blank=True)
+    full_name = models.CharField(max_length=200, null=True, blank=True)
     bio = models.CharField(max_length=200, null=True, blank=True)
-    phone = models.CharField(max_length=50)
-    verified = models.BooleanField(default=False)
-
+    phone = models.CharField(max_length=200, null=True, blank=True) 
+    address = models.CharField(max_length=200, null=True, blank=True) 
+    country = models.CharField(max_length=200, null=True, blank=True) 
+    verified = models.BooleanField(default=False, null=True, blank=True)
+    
     def __str__(self):
-        return self.full_Name
+        return f"{self.user.username} - {self.full_name} - {self.bio}"
     
 # Contact Us Model 
 # We will use this for a contact.html page
@@ -47,3 +51,16 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return self.full_name
+    
+
+# 
+def create_user_profile(sender, instance, created, **kwargs):   #kwargs is Keyword arguments
+    if created:
+        Profile.objects.create(user=instance)
+
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+ 
+post_save.connect(create_user_profile, sender=User)
+post_save.connect(save_user_profile, sender=User)    

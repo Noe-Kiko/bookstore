@@ -17,6 +17,12 @@ from django.core import serializers
 from userauths.models import Profile, ContactUs
 
 # Create your views here.
+'''
+For the ake of organization, no userauthenitcation view will be used in this section. 
+Since I am trying to build a clean final product I want to keep domain separation a thing. 
+Therefore, separating the user views not only would help us locate it easily but will help us reuse it for any future projects
+'''
+
 def index(request):
     #products = Product.objects.all().order_by("-id")
     products = Product.objects.filter(product_status="published", featured = True)

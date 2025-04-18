@@ -7,7 +7,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'email', 'bio']
 
 class profileAdmin(admin.ModelAdmin):
-    list_display = ['full_Name', 'bio', 'phone']
+    list_display = ['full_name', 'bio', 'phone']
 
 class ContactUsAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'email', 'subject']
