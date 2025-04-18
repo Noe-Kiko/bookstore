@@ -367,6 +367,54 @@ if (typeof jQuery === 'undefined') {
     })
 
 
+    $(document).on("submit", "#contact-form-ajax", function (e) {
+        e.preventDefault()
+        console.log("Submited...");
+
+        let full_name = $("#full_name").val()
+        let email = $("#email").val()
+        let phone = $("#phone").val()
+        let subject = $("#subject").val()
+        let message = $("#message").val()
+        let csrftoken = $('input[name="csrfmiddlewaretoken"]').val()
+
+        console.log("Name:", full_name);
+        console.log("Email:", email);
+        console.log("Phone:", phone);
+        console.log("Subject:", subject);
+        console.log("Message:", message);
+
+        $.ajax({
+            url: "/ajax-contact-form/",
+            data: {
+                "full_name": full_name,
+                "email": email,
+                "phone": phone,
+                "subject": subject,
+                "message": message,
+                "csrfmiddlewaretoken": csrftoken
+            },
+            type: "POST",
+            dataType: "json",
+            beforeSend: function () {
+                console.log("Sending Data to Server...");
+            },
+            success: function (res) {
+                console.log("Sent Data to server!");
+                $(".contact_us_p").hide()
+                $("#contact-form-ajax").hide()
+                $("#message-response").html("Message sent successfully.")
+            },
+            error: function(xhr, status, error) {
+                console.error("Error sending message:", error);
+                console.log("Status:", status);
+                console.log("Response:", xhr.responseText);
+                $("#message-response").html("Error sending message. Please try again.").css("color", "red");
+            }
+        })
+    })
+
+
 
     // Responsible to tell user whether the price is possible or not 
     // Let me explain: If the minimum price on the entire shop is $2 and the user filters 
