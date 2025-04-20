@@ -16,8 +16,11 @@ from pathlib import Path
 # Import OS
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+from environs import Env
+env = Env()
+env.read_env()
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,6 +34,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# This fix allowed the visual glitch to be removed
+    # Whenever I clicked on the paypal button on the checkout.html 
+    # a white box popup appeared, this allowed it to work correctly.
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-original-allow-popups"
 
 # Application definition
 
@@ -47,7 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'taggit',
-    'ckeditor',
+    'django_ckeditor_5',
 
     #################################################################################
     # Note by Noe
@@ -150,7 +157,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-MEDIA = '/media/'
+MEDIA_URL = '/media/'
 
 # All media files will be sitting here, for example
 # product pictures will be stored here
@@ -162,9 +169,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+############################  JAZZMIN  ############################
+'''
+Below is responsible for some design features in local machines admin page
+'''
 
-# Below is responsible for some design features in 
-# local machines admin page
 JAZZMIN_SETTINGS = {
     'site_header': "Noe's Bookshop",
     'site_brand': "You Buy, We Supply!",
@@ -177,6 +186,19 @@ LOGIN_URL = "userauths/sign-in"
 
 AUTH_USER_MODEL = 'userauths.User'
 
+
+############################  CKEditor 5 Settings ############################
+'''
+CKEditor 5 upload path
+'''
+CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+CKEDITOR_5_STORAGE_BACKEND_URL = "/media/uploads/"
+CKEDITOR_5_UPLOAD_PATH = "uploads/"
+
+'''
+I believe this below was when I was using CK Editor 4, but updated it to 5 due to security issues according to manage.py runservers system checks
+
+'''
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_CONFIGS = {
@@ -194,7 +216,26 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+# CKEditor 5's Textbox Default Settings (Configurations) 
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
+                   'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
+    },
+}
 
+############################  PAYPAL SETTINGS  ############################
+
+# Below it's important to use business email
 PAYPAL_RECEIVER_EMAIL = 'noesandbox1@gmail.com' 
 
 PAYPAL_TEST = True
+
+############################  STRIPE SETTINGS  ############################
+
+# Below .env stripe_public_key
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
+
+# Below .env stripe_secret_key
+
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")

@@ -1,43 +1,6 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% block content %}
-    <style>
-        .updated {
-            animation: highlight 1s ease-out;
-        }
-        @keyframes highlight {
-            0% { background-color: rgba(255, 193, 7, 0.2); }
-            100% { background-color: transparent; }
-        }
-        .fi-rs-refresh.fa-spin {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        #loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-        }
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
-    <div id="loading-overlay">
-        <div class="loading-spinner">
-            <i class="fi-rs-refresh fa-spin fa-3x"></i>
-        </div>
-    </div>
     <main class="main" id="cart-list">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -57,7 +20,7 @@
                     </div>
                 </div>
             </div>
-            
+            <form action="{% url 'core:save_checkout_info' %}" method="POST">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-8">
@@ -110,11 +73,11 @@
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="">Email</label>
-                                        <input type="text" required="" name="email"  placeholder="mobile *" value="{{request.user.email}}">
+                                        <input type="text" required="" name="email"  placeholder="email@email.com" value="{{request.user.email}}">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="">Mobile</label>
-                                        <input type="text" name="mobile" value="{{request.user.profile.phone}}" required="" placeholder="Address *">
+                                        <input type="text" name="mobile" value="{{request.user.profile.phone}}" required="" placeholder="Mobile # ">
                                     </div>
                                 </div>
                                 <h4 class="mb-30">Shipping Details</h4>
@@ -163,7 +126,7 @@
                                 </div>
                             </div>
                             {% if totalcartitems %}
-                                <a href="{% url 'core:checkout' %}" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                                <button type=submit" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></button>
                             {% endif %}                    
                         </div>
                     </div>

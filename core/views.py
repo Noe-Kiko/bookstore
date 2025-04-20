@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
-from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address
+from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address, Coupon
 from django.db.models import Count, Avg
 from taggit.models import Tag
 from django.template.loader import render_to_string
@@ -11,10 +11,16 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.forms import PayPalPaymentsForm
 from django.contrib.auth.decorators import login_required
+
 # added serializers for wishlist inorder for function.js remove wishlist function/feature to work properly
 # without the use of serializers will cause tons of issues with django querysets. 
 from django.core import serializers
 from userauths.models import Profile, ContactUs
+
+# Not only are we dealing with Paypal for payment but we will be working with stripe
+import stripe
+
+# 
 
 # Create your views here.
 '''
@@ -210,7 +216,6 @@ def add_to_cart(request):
 
             cart_data = request.session['cart_data_obj']
             cart_data[str(request.GET['id'])]['qty'] = int(cart_product[str(request.GET['id'])]['qty'])
-            cart_data.update(cart_data)
             request.session['cart_data_obj'] = cart_data
         else:
             cart_data = request.session['cart_data_obj']
@@ -280,49 +285,150 @@ def update_cart(request):
         "item_total": "{:.2f}".format(item_total)
     })
 
-@login_required
-def checkout_view(request):
-    if 'cart_data_obj' not in request.session:
-        messages.warning(request, "Your cart is empty")
-        return redirect("core:index")
 
-    host = request.get_host()
+def save_checkout(request):
+    cart_total_amount = 0
 
-    paypalDictionary = {
-        'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount':200,
-        'item_name': "Order-Item-Number-2",
-        'invoice':"INVOICE-NUMBER-3",
-        'currency_code':"USD",
-        'notification_url':'http://{}{}'.format(host, reverse("core:paypal-ipn")),
-        'return_url':'http://{}{}'.format(host, reverse("core:payment-completed")),
-        'cancel_url':'http://{}{}'.format(host, reverse("core:payment-failed"))
+    # The variable below is completely dynamic, we're going to set it to zero
+    # But when we start adding things into the cart the total_amount will begin to change value 
+    # Depending on what the user has inside of their cart
+    total_amount = 0
+
+    # We want to grab the users information that he will input from: 
+    # cart.html
+    if request.method == "POST":
+        full_name = request.POST.get("full_name")
+        email = request.POST.get("email")
+        mobile = request.POST.get("mobile")
+        address = request.POST.get("address")
+        city = request.POST.get("city")
+        state = request.POST.get("state")
+        country = request.POST.get("country")
+
+        print(full_name)
+        print(email)
+        print(mobile)
+        print(address)
+        print(city)
+        print(state)
+        print(country)
+
+        # Now we want to save the users information during their shopping session
+        request.session['full_name'] = full_name
+        request.session['email'] = email
+        request.session['mobile'] = mobile
+        request.session['address'] = address
+        request.session['city'] = city
+        request.session['state'] = state
+        request.session['country'] = country
+
+        if 'cart_data_obj' in request.session:
+
+            # Getting total amount for Paypal Amount
+            for p_id, item in request.session['cart_data_obj'].items():
+                total_amount += int(item['qty']) * float(item['price'])
+
+            full_name = request.session['full_name']
+            email = request.session['email']
+            phone = request.session['mobile']
+            address = request.session['address']
+            city = request.session['city']
+            state = request.session['state']
+            country = request.session['country']
+
+            # Create order Object
+            order = CartOrder.objects.create(
+                user=request.user,
+                price=total_amount,
+                full_name=full_name,
+                email=email,
+                phone=phone,
+                address=address,
+                city=city,
+                state=state,
+                country=country,
+            )
+
+            # After successfully collecting the information during the users session
+            # and placing it into ORDER object we can then delete the data stored during the session
+            del request.session['full_name']
+            del request.session['email']
+            del request.session['mobile']
+            del request.session['address']
+            del request.session['city']
+            del request.session['state']
+            del request.session['country']
+
+            # Getting total amount for The Cart
+            for p_id, item in request.session['cart_data_obj'].items():
+                cart_total_amount += int(item['qty']) * float(item['price'])
+
+                cartOrderItems = CartOrderItems.objects.create(
+                    order=order,
+                    invoice_no="INVOICE_NO-" + str(order.id), # INVOICE_NO-5,
+                    item=item['title'],
+                    image=item['image'],
+                    qty=item['qty'],
+                    price=item['price'],
+                    total=float(item['qty']) * float(item['price'])
+                )
+        return redirect("core:checkout", order.oid)
+    return redirect("core:checkout", order.oid)
+
+
+def checkout(request, oid):
+    order = CartOrder.objects.get(oid=oid)
+    order_items = CartOrderItems.objects.filter(order=order)
+
+    ############ BELOW IS TO SUPPORT COUP FUNCTIONALITY ############
+    if request.method == "POST":
+        code = request.POST.get("code")
+        print("code ========", code)
+        coupon = Coupon.objects.filter(code=code, active=True).first()
+
+        # Create a security mechanism for the coupon fearure: 
+            # Add security message to notify user that coupon has been used "activated"
+        if coupon:
+            if coupon in order.coupons.all():
+                messages.warning(request, "Coupon already activated")
+                return redirect("core:checkout", order.oid)
+            
+            # otherwise, if not activated allow it to work
+            else:
+                # Calculation for superuser to create coupon in % form
+                discount = order.price * coupon.discount / 100 
+                order.coupons.add(coupon)
+                order.price -= discount
+                order.money_saved += discount
+                order.save()
+
+                messages.success(request, "Coupon Activated")
+                return redirect("core:checkout", order.oid)
+            
+        # Prompt security message to notify user that coupon doesn't exist in our database
+        else:
+            messages.error(request, "Coupon Does Not Exists")
+ 
+    context = {
+        "order":order,
+        "order_items":order_items,
+        "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
     }
 
-    paypal_payment_button = PayPalPaymentsForm(initial=paypalDictionary)
-
-    cart_total_amount = 0
-    if 'cart_data_obj' in request.session:
-        for p_id, item in request.session["cart_data_obj"].items():
-            price = clean_price(item['price'])
-            cart_total_amount = cart_total_amount + int(item['qty']) * float(price)
-
-    try: 
-        activeAddress = Address.objects.get(user=request.user, status=True)
-    except: 
-        messages.warning(request, "You have more than one address activated")
-        activeAddress = None
-
-    return render(request, "core/checkout.html", {"cart_data":request.session["cart_data_obj"], "totalcartitems": len(request.session["cart_data_obj"]), 
-                                    "cart_total_amount":cart_total_amount, "paypal_payment_button":paypal_payment_button, "activeAddress":activeAddress})
+    return render(request, "core/checkout.html", context)
 
 @login_required
-def paypalCompletedView(request):
-    cart_total_amount = 0
-    if 'cart_data_obj' in request.session:
-        for p_id, item in request.session["cart_data_obj"].items():
-            cart_total_amount = cart_total_amount + int(item['qty']) * float(item["price"])
-    return render(request, 'core/payment-completed.html', {'cart_data':request.session['cart_data_obj'],'totalcartitems':len(request.session['cart_data_obj']),'cart_total_amount':cart_total_amount})
+def paypalCompletedView(request, oid):
+    order = CartOrder.objects.get(oid=oid)
+    if order.paid_status == False:
+        order.paid_status == True
+        order.save()
+
+    context = {
+        "order":order,
+    }
+
+    return render(request, 'core/payment-completed.html', context)
 
 @login_required
 def paypalFailedView(request):
@@ -377,7 +483,7 @@ def defaultAddress(request):
     return JsonResponse({"boolean":True})
 
 
-#########   WISHLIST     #########
+##################   WISHLIST    ##################
 @login_required
 def wishlistView(request):
     wishlist = wishListModel.objects.all()
@@ -450,3 +556,45 @@ def ajax_contact_form(request):
     }
 
     return JsonResponse({"data":data})
+
+
+@csrf_exempt
+def createCheckoutSession(request, oid):
+    order = CartOrder.objects.get(oid=oid)
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    checkoutSession = stripe.checkout.Session.create(
+        customer_email = order.email,
+        payment_method_types=['card'],
+
+        line_items = [
+            {
+                'price_data': {
+                    'currency': 'USD',
+                    'product_data': {
+                        'name': order.full_name
+                    },
+                    'unit_amount': int(order.price * 100)
+                },
+                'quantity': 1
+            }
+        ],
+        mode = 'payment',
+        
+        # If payment succeeds, redirect the user to the payment-completed.html to notify them purchase has been successful
+        # STRIPE EXPECTS TO LOOK FOR success_url, THEREFORE DON'T CHANGE IT 
+
+        success_url = request.build_absolute_uri(reverse("core:payment-completed", args=[order.oid])) + "?session_id={CHECKOUT_SESSION_ID}",
+
+        # If payment fails, redirect the user to the payment-failed.html to notify them about payment not going through 
+        # STRIPE EXPECTS TO LOOK FOR cancel_url, THEREFORE DON'T CHANGE IT 
+        cancel_url = request.build_absolute_uri(reverse("core:payment-failed"))
+    )
+
+    order.paid_status = False
+    order.stripe_payment_intent = checkoutSession['id']
+    order.save()
+
+    print("checkkout session", checkoutSession)
+    return JsonResponse({"sessionId": checkoutSession.id})
+    

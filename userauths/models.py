@@ -53,8 +53,9 @@ class ContactUs(models.Model):
         return self.full_name
     
 
-# 
+# We will use django signals to create a profile for a user when they sign up automatically. 
 def create_user_profile(sender, instance, created, **kwargs):   #kwargs is Keyword arguments
+    # When a new 
     if created:
         Profile.objects.create(user=instance)
 

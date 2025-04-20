@@ -120,23 +120,33 @@ if (typeof jQuery === 'undefined') {
         $(document).on("click", ".add-to-cart-btn", function(e){
             e.preventDefault();
             
+            console.log("Add to cart button clicked");
+            
             let this_val = $(this);
             let product_id = this_val.attr("data-index");
+            console.log("Product ID:", product_id);
+            
             let quantity = $(".product-quantity-" + product_id).val() || 1;
             let product_title = $(".product-title-" + product_id).val();
             
-            // Modified to work with wishlist page
-            let product_price;
             // Check if we're on the wishlist page
+            let product_price;
             if ($("#wishlist-list").length) {
                 product_price = $(".current-product-price-" + product_id).text().trim();
             } else {
-                // Original behavior for other pages
-                product_price = this_val.closest('.product-cart-wrap').find('.current-product-price').text().replace('$', '').trim();
+                // Find price element in the DOM
+                product_price = $(".current-product-price").text().trim();
             }
+            
+            console.log("Quantity:", quantity);
+            console.log("Title:", product_title);
+            console.log("Price:", product_price);
             
             let product_pid = $(".product-pid-" + product_id).val();
             let product_image = $(".product-image-" + product_id).val();
+            
+            console.log("PID:", product_pid);
+            console.log("Image:", product_image);
 
             console.log("Adding to cart:", {
                 id: product_id,
@@ -148,7 +158,7 @@ if (typeof jQuery === 'undefined') {
             });
 
             $.ajax({
-                url: '/add-to-cart/',
+                url: window.location.origin + '/add-to-cart/',
                 data: {
                     'id': product_id,
                     'title': product_title,
@@ -159,15 +169,23 @@ if (typeof jQuery === 'undefined') {
                 },
                 dataType: 'json',
                 beforeSend: function(){
+                    console.log("Sending Ajax request");
                     this_val.prop('disabled', true);
                 },
                 success: function(response){
+                    console.log("Success response:", response);
                     this_val.html("Added to cart");
                     $(".cart-items-count").text(response.totalcartitems);
                     setTimeout(function(){
                         this_val.prop('disabled', false);
                         this_val.html('<i class="fi-rs-shopping-cart mr-5"></i>Add');
                     }, 2000);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding to cart:", error);
+                    console.error("Status:", status);
+                    console.error("Response:", xhr.responseText);
+                    this_val.prop('disabled', false);
                 }
             });
         });

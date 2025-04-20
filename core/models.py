@@ -5,8 +5,7 @@ from django.utils.html import mark_safe
 from pyexpat import model
 from userauths.models import User
 from taggit.managers import TaggableManager
-from ckeditor.fields import RichTextField
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 STATUS_CHOICE = {
 
@@ -50,7 +49,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
     def category_image(self):
-        return mark_safe('<img sec= "%s" width="50" height="50" />' % (self.image.url))
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
     
     def __str__(self):
         return self.title
@@ -65,10 +64,10 @@ class Vendor(models.Model):
     vid = ShortUUIDField(unique=True, length=10, max_length=30, prefix="vendor", alphabet="abcdefg12345")
 
     title = models.CharField(max_length=100, default="Vendor name")
-    image = models.ImageField(upload_to="user_directory_path", default="vendor.jpg")
-    cover_image = models.ImageField(upload_to="user_directory_path", default="vendor.jpg")
+    image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
+    cover_image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
 
-    description = RichTextUploadingField(null = True, blank = True, default = "Describe yourself!")
+    description = CKEditor5Field(null = True, blank = True, default = "Describe yourself!")
     
     address = models.CharField(max_length=100, default = "Vendor's Address")
     contact = models.CharField(max_length=100, default = "(732) - 123 - 4567")
@@ -85,7 +84,7 @@ class Vendor(models.Model):
         verbose_name_plural = "Vendors"
 
     def vendor_image(self):
-        return mark_safe('<img sec= "%s" width="50" height="50" />' % (self.image.url))
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
     
     def __str__(self):
         return self.title
@@ -97,8 +96,8 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="category")
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, related_name="products")
     title = models.CharField(max_length=100, default="Product Title")
-    image = models.ImageField(upload_to="user_directory_path", default="product.jpg")
-    description = RichTextUploadingField(null = True, blank = True, default = "Describe yourself!")
+    image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
+    description = CKEditor5Field(null = True, blank = True, default = "Here feel free to write anything about the book! Such as the wear, edition, covertype, and etc!")
 
     ###### CHANGED DEFAULT FROM FLOAT TO STR #####
     price = models.DecimalField(max_digits=10, decimal_places=2, default="9.99")
@@ -127,7 +126,7 @@ class Product(models.Model):
             verbose_name_plural = "Products"
 
     def product_image(self):
-            return mark_safe('<img sec= "%s" width="50" height="50" />' % (self.image.url))
+            return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
         
     def __str__(self):
             return self.title
@@ -148,11 +147,34 @@ class ProductImages(models.Model):
 ########################
 class CartOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=9999999, decimal_places=2, default=9.99)
+
+    # Put models from cart page in here 
+    full_name = models.CharField(max_length=50, null=True, blank=True)
+    email = models.CharField(max_length=50, null=True, blank=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    address = models.CharField(max_length=50, null=True, blank=True)
+    city = models.CharField(max_length=50, null=True, blank=True)
+    state = models.CharField(max_length=50, null=True, blank=True)
+    country = models.CharField(max_length=50, null=True, blank=True)
+
+    shipping_method = models.CharField(max_length=50, null=True, blank=True)
+    trackingId = models.CharField(max_length=50, null=True, blank=True)
+    trackingWebsite = models.CharField(max_length=50, null=True, blank=True)
+
+    price = models.DecimalField(max_digits=9, decimal_places=2, default=9.99)
+    money_saved = models.CharField(max_length=50, null=True, default=0.00)
     paid_status = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
     product_status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing")
 
+    # The bookstore is a marketplace, therefore if we have any vendors who are selling books 
+    # as their full time job, we want to provide features to help them organize or manage their inventory
+    # The Custom label is sort of like SKU's
+    custom_label = ShortUUIDField(null=True, blank=True, length=5, max_length=20,)
+    oid = ShortUUIDField(null=True, blank=True, length=5, max_length=20, alphabet="123456789")
+
+    # Adding Coupon Feature
+    coupons = models.ManyToManyField("core.Coupon", blank=True)
     class Meta:
         verbose_name_plural = "Cart Order"
 
@@ -164,8 +186,8 @@ class CartOrderItems(models.Model):
     item = models.CharField(max_length=200)
     image = models.CharField(max_length=200)
     qty = models.IntegerField(default=0)
-    price = models.DecimalField(max_digits=12, decimal_places=2, default="0.00")
-    total = models.DecimalField(max_digits=12, decimal_places=2, default="0.00")
+    price = models.DecimalField(max_digits=9, decimal_places=2, default="0.00")
+    total = models.DecimalField(max_digits=9, decimal_places=2, default="0.00")
 
     class Meta:
         verbose_name_plural = "Cart Order Items"
@@ -212,3 +234,13 @@ class Address(models.Model):
 
     class Meta:
         verbose_name_plural = "Address"
+
+########################
+class Coupon(models.Model):
+    code = models.CharField(max_length=15)
+    discount = models.IntegerField(default=0)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.code}"
+    

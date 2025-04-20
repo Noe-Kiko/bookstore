@@ -1,7 +1,7 @@
 from django.urls import path, include # We need inlcude for paypal integration
-from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view 
-from core.views import tag_list, add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout_view
-from core.views import paypalCompletedView, paypalFailedView, dashboard, orderDetail, defaultAddress, wishlistView, addToWishList, removeFromWishlist, contact, ajax_contact_form
+from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review
+from core.views import search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout, paypalCompletedView, paypalFailedView, createCheckoutSession
+from core.views import  dashboard, orderDetail, defaultAddress, wishlistView, addToWishList, removeFromWishlist, contact, ajax_contact_form, save_checkout
 
 app_name = "core"
 
@@ -22,7 +22,7 @@ urlpatterns = [
     path("category/", category_list_view, name="category-list"),
     path("category/<cid>/", category_product_list_view, name="category-product-list"),
 
-    # Views for Vender
+    # Vendor Views
     path("vendors/", vendor_list_view, name="vendor-list"),
     path("vendors/<vid>", vendor_detail_view, name="vendor-detail"),
 
@@ -33,6 +33,7 @@ urlpatterns = [
     path("search/", search_view, name="search"),
     path("filter-products/", filter_product, name = "filter-product"),
 
+    #################### Cart Views  #################### 
     # Add to cart URL
     path("add-to-cart/", add_to_cart, name = "add-to-cart"),
 
@@ -43,29 +44,50 @@ urlpatterns = [
     path("delete-from-cart/", delete_item_from_cart, name = "delete-from-cart"),
 
     path("update-cart/", update_cart, name = "update-cart"),
+    #################### Cart Views  #################### 
 
-    path("checkout/", checkout_view, name = "checkout"),
 
-    # Paypals URL
+    ####################  CHECKOUT VIEWS ####################
+    # Checkout View
+    path("checkout/<oid>/", checkout , name = "checkout"),
+
+    # Save Checkout
+    path("save_checkout_info/", save_checkout , name = "save_checkout_info"),
+
+    # Additional Checkout: 
+    # For stripe
+    path("api/create_checkout_session/<oid>/", createCheckoutSession, name="api_checkout_session"),
+
+    ####################  CHECKOUT VIEWS ####################
+
+
+    #################### Payment Views  #################### 
+    # Paypal Views
     path('paypal/', include('paypal.standard.ipn.urls')),
 
-    path('payment-completed/', paypalCompletedView, name="payment-completed"),
+    path('payment-completed/<oid>/', paypalCompletedView, name="payment-completed"),
 
     path('payment-failed/', paypalFailedView, name="payment-failed"),
+    #################### Payment Views  #################### 
 
+
+    #################### User Info Views  #################### 
+    # User Dashboard Views
     path('dashboard/', dashboard, name="dashboard"),
-
     path('dashboard/order/<int:id>', orderDetail, name="order-detail"),
-
     path("make-default-address/", defaultAddress , name="make-default-address"),
+    #################### User Info Views  #################### 
 
+
+    #################### Wishlists Views  #################### 
     path ("wishlist/", wishlistView, name="wishlist"),
-
     path("add-to-wishlist/", addToWishList, name="add-to-wishlist"), 
-
     path("remove-from-wishlist/", removeFromWishlist, name="remove-from-wishlist"), 
+    #################### Wishlists Views #################### 
 
+    # Contact Views
     path("contact/", contact, name="contact"),
-
     path("ajax-contact-form/", ajax_contact_form, name="ajax-contact-form"),
+
+
 ]
