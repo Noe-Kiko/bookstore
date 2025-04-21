@@ -25,11 +25,11 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="image", null=True, blank=True)
-    full_name = models.CharField(max_length=200, null=True, blank=True)
-    bio = models.CharField(max_length=200, null=True, blank=True)
-    phone = models.CharField(max_length=200, null=True, blank=True) 
+    full_name = models.CharField(max_length=50, null=True, blank=True)
+    bio = models.CharField(max_length=300, null=True, blank=True)
+    phone = models.CharField(max_length=15, null=True, blank=True) 
     address = models.CharField(max_length=200, null=True, blank=True) 
-    country = models.CharField(max_length=200, null=True, blank=True) 
+    country = models.CharField(max_length=60, null=True, blank=True) 
     verified = models.BooleanField(default=False, null=True, blank=True)
     
     def __str__(self):
@@ -39,10 +39,10 @@ class Profile(models.Model):
 # We will use this for a contact.html page
 # This is where users will contact the website's admin and they have to 
 class ContactUs(models.Model):
-    full_name = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
-    phone = models.CharField(max_length=200) 
-    subject = models.CharField(max_length=200) 
+    full_name = models.CharField(max_length=50)
+    email = models.CharField(max_length=35)
+    phone = models.CharField(max_length=15) 
+    subject = models.CharField(max_length=30) 
     message = models.TextField()
 
     class Meta:

@@ -103,20 +103,16 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default="9.99")
     old_price = models.DecimalField(max_digits=10, decimal_places=2, default="5.99")
     ###### CHANGED DEFAULT FROM FLOAT TO STR #####
-    
-    coverType = models.TextField(null = True, blank = True, default = "Hardcover")
-   
-    subject = models.CharField(max_length=100, default="N/A", null=True, blank=True)
-    isbn = models.CharField(max_length=100, default="N/A", null=True, blank=True)
-    publishDate = models.TextField(null = True, blank = True, default = "Enter todays date")
+       
+    publishDate = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     stock_count = models.CharField(max_length=100, default="N/A", null=True, blank=True)
-    
+    condition = models.CharField(max_length=100, default="Organic", null=True, blank=True)
+
     tags = TaggableManager(blank=True)
     product_status = models.CharField(choices=STATUS, max_length=10, default="in_review")
     status = models.BooleanField(default=True)
     in_stock = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
-    digital = models.BooleanField(default=False)
 
     sku = ShortUUIDField(unique=True, length=5, max_length=30, prefix = "sku", alphabet="1234567890")
     date = models.DateTimeField(auto_now_add=True)
@@ -165,7 +161,7 @@ class CartOrder(models.Model):
     money_saved = models.CharField(max_length=50, null=True, default=0.00)
     paid_status = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
-    product_status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing")
+    product_status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing", null=True, blank=True)
 
     # The bookstore is a marketplace, therefore if we have any vendors who are selling books 
     # as their full time job, we want to provide features to help them organize or manage their inventory
