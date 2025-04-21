@@ -90,7 +90,7 @@
                         </div>
                         <div class="loop-grid pr-30">
                             <div class="row">
-                                {{% for c in categories %}}
+                                {% for c in categories %}
                                 <article class="col-xl-4 col-lg-6 col-md-6 text-center hover-up mb-30 animated">
                                     <div class="post-thumb">
                                         <a href="{% url 'core:category-product-list' c.cid %}">
@@ -107,12 +107,12 @@
                                         </h4>
                                         <div class="entry-meta font-xs color-grey mt-10 pb-10">
                                             <div>
-                                                <span class="hit-count mr-10">{{c.category.all}} Product{{c.category.count|pluraize}}</span>
+                                                <span class="hit-count mr-10">{{c.category.all}} Product{{c.category.count|pluralize}}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </article>
-                                {{% endfor %}}
+                                {% endfor %}
                             </div>
                         </div>
 

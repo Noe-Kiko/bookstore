@@ -159,12 +159,26 @@ def add_review(request, pid):
 # when searching, it's going to grab any product that contains the information the user inserted and will output the most latest added products
 def search_view(request):
     query = request.GET.get("q")
-
-    products=Product.objects.filter(title__icontains=query).order_by("-date")
+    sort_by = request.GET.get("sort", "featured")  # Default sort is featured
+    
+    products = Product.objects.filter(title__icontains=query)
+    
+    # Apply sorting based on the sort parameter
+    if sort_by == "price_low_to_high":
+        products = products.order_by("price")
+    elif sort_by == "price_high_to_low":
+        products = products.order_by("-price")
+    elif sort_by == "release_date":
+        products = products.order_by("-date")
+    elif sort_by == "avg_rating":
+        products = products.order_by("-rating")
+    else:  # Default to featured (which we'll implement as newest)
+        products = products.order_by("-date")
 
     context = {
-        "products":products,
-        "query":query,
+        "products": products,
+        "query": query,
+        "current_sort": sort_by,
     }
     return render(request, "core/search.html", context)
 

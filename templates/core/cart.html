@@ -1,6 +1,7 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% block content %}
+<!--  Note: Correctly Complete  -->
     <main class="main" id="cart-list">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -107,18 +108,9 @@
                             <div class="table-responsive">
                                 <div>
                                     <div class="d-flex justify-content-between mb-2">
-                                        <p class="fw-bold">Tax</p>
-                                        <p>$0</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <p class="fw-bold">Shipping</p>
-                                        <p>$0</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
                                         <p class="fw-bold">Discount</p>
                                         <p>$0</p>
                                     </div>
-                                    
                                     <div class="d-flex justify-content-between mb-2">
                                         <p class="fw-bold">Total</p>
                                         <p>${{cart_total_amount}}</p>
@@ -126,7 +118,7 @@
                                 </div>
                             </div>
                             {% if totalcartitems %}
-                                <button type=submit" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></button>
+                                <button type="submit" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></button>
                             {% endif %}                    
                         </div>
                     </div>

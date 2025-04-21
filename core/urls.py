@@ -16,7 +16,7 @@ urlpatterns = [
     # Views for Homepage
     path("", index, name="index"),
     path("products/", product_list_view, name="product-list"),
-    path("products/<pid>", product_detail_view, name="product-detail"),
+    path("products/<pid>/", product_detail_view, name="product-detail"),
 
     # Views for Category
     path("category/", category_list_view, name="category-list"),
@@ -24,7 +24,7 @@ urlpatterns = [
 
     # Vendor Views
     path("vendors/", vendor_list_view, name="vendor-list"),
-    path("vendors/<vid>", vendor_detail_view, name="vendor-detail"),
+    path("vendors/<vid>/", vendor_detail_view, name="vendor-detail"),
 
     path("products/tag/<slug:tag_slug>/", tag_list, name="tags"),
 

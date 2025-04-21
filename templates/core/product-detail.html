@@ -5,8 +5,8 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                    <span></span> <a href="shop-grid-right.html">Vegetables & tubers</a> <span></span> Seeds of Change Organic
+                    <a href="{% url 'core:index' %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> <a href="{% url 'core:category-product-list' p.category.cid %}">{{p.category.title}}</a> <span></span> {{p.title}}
                 </div>
             </div>
         </div>
@@ -65,23 +65,7 @@
                                             <div class="short-desc mb-30">
                                                 <p class="font-lg">{{p.description}}</p>
                                             </div>
-                                            <!-- <div class="attr-detail attr-size mb-30">
-                                                <strong class="mr-10">Size / Weight: </strong>
-                                                <ul class="list-filter size-filter font-small">
-                                                    <li><a href="#">50g</a></li>
-                                                    <li class="active"><a href="#">60g</a></li>
-                                                    <li><a href="#">80g</a></li>
-                                                    <li><a href="#">100g</a></li>
-                                                    <li><a href="#">150g</a></li>
-                                                </ul>
-                                            </div> -->
                                             <div class="detail-extralink mb-50">
-                                                <!-- <div class="detail-qty border radius">
-                                                    <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                    <span class="qty-val">1</span>
-                                                    <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                                </div> -->
-
                                                 <input type="number" value="1" name="" id="product-quantity" class="w-25 mb-20 product-quantity-{{p.id}}">
                                                 <br>
                                                 <div class="product-extra-link2">
@@ -92,7 +76,6 @@
                                                     <input type="hidden" class="product-title-{{p.id}}" value="{{p.title}}">
                                                     <button type="submit" class="button button-add-to-cart add-to-cart-btn" data-index="{{p.id}}"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
                                                     <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                    <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
                                                 </div>
                                             </div>
                                             <div class="font-xs">
@@ -137,102 +120,12 @@
                                                 </div>
                                                 <!-- Indentation may be incorrect but it's for description -->
                                             </div>
-                                            <div class="tab-pane fade" id="Additional-info">
-                                                <table class="font-md">
-                                                    <tbody>
-                                                        <tr class="stand-up">
-                                                            <th>Stand Up</th>
-                                                            <td>
-                                                                <p>35″L x 24″W x 37-45″H(front to back wheel)</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="folded-wo-wheels">
-                                                            <th>Folded (w/o wheels)</th>
-                                                            <td>
-                                                                <p>32.5″L x 18.5″W x 16.5″H</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="folded-w-wheels">
-                                                            <th>Folded (w/ wheels)</th>
-                                                            <td>
-                                                                <p>32.5″L x 24″W x 18.5″H</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="door-pass-through">
-                                                            <th>Door Pass Through</th>
-                                                            <td>
-                                                                <p>24</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="frame">
-                                                            <th>Frame</th>
-                                                            <td>
-                                                                <p>Aluminum</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="weight-wo-wheels">
-                                                            <th>Weight (w/o wheels)</th>
-                                                            <td>
-                                                                <p>20 LBS</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="weight-capacity">
-                                                            <th>Weight Capacity</th>
-                                                            <td>
-                                                                <p>60 LBS</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="width">
-                                                            <th>Width</th>
-                                                            <td>
-                                                                <p>24″</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="handle-height-ground-to-handle">
-                                                            <th>Handle height (ground to handle)</th>
-                                                            <td>
-                                                                <p>37-45″</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="wheels">
-                                                            <th>Wheels</th>
-                                                            <td>
-                                                                <p>12″ air / wide track slick tread</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="seat-back-height">
-                                                            <th>Seat back height</th>
-                                                            <td>
-                                                                <p>21.5″</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="head-room-inside-canopy">
-                                                            <th>Head room (inside canopy)</th>
-                                                            <td>
-                                                                <p>25″</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="pa_color">
-                                                            <th>Color</th>
-                                                            <td>
-                                                                <p>Black, Blue, Red, White</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr class="pa_size">
-                                                            <th>Size</th>
-                                                            <td>
-                                                                <p>M, S</p>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                             <div class="tab-pane fade" id="Vendor-info">
                                                 <div class="vendor-logo d-flex mb-30">
                                                     <img src="{{p.vendor.image.url}}" alt="" />
                                                     <div class="vendor-name ml-15">
                                                         <h6>
-                                                            <a href="vendor-details-2.html">{{p.vendor.title}}</a>
+                                                            <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{p.vendor.title}}</a>
                                                         </h6>
                                                         <div class="product-rate-cover text-end">
                                                             <div class="product-rate d-inline-block">
@@ -401,7 +294,6 @@
                                                         </div>
                                                         <div class="product-action-1">
                                                             <a aria-label="Add To Wishlist"  class="action-btn add-to-wishlist" data-product-item="{{p.id}}"><i class="fi-rs-heart"></i></a>
-                                                            <!-- <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> -->
                                                             <a href="{% url 'core:product-detail' p.pid %}" class="action-btn"><i class="fi-rs-eye"></i></a>
                                                         </div>
                                                         <div class="product-badges product-badges-position product-badges-mrg">
@@ -493,7 +385,7 @@
                                     <img src="{{p.vendor.image.url}}" alt="" />
                                     <div class="vendor-name ml-15">
                                         <h6>
-                                            <a href="vendor-details-2.html">{{p.vendor.title}}</a>
+                                            <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{p.vendor.title}}</a>
                                         </h6>
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
@@ -546,95 +438,6 @@
                                         <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-5.svg' %}" alt="" />Fresh Fruit</a><span class="count">87</span>
                                     </li>
                                 </ul>
-                            </div>
-                            <!-- Fillter By Price -->
-                            <div class="sidebar-widget price_range range mb-30">
-                                <h5 class="section-title style-1 mb-30">Fill by price</h5>
-                                <div class="price-filter">
-                                    <div class="price-filter-inner">
-                                        <div id="slider-range" class="mb-20"></div>
-                                        <div class="d-flex justify-content-between">
-                                            <div class="caption">From: <strong id="slider-range-value1" class="text-brand"></strong></div>
-                                            <div class="caption">To: <strong id="slider-range-value2" class="text-brand"></strong></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="list-group">
-                                    <div class="list-group-item mb-10 mt-10">
-                                        <label class="fw-900">Color</label>
-                                        <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox1"><span>Red (56)</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox2" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox2"><span>Green (78)</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox3" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox3"><span>Blue (54)</span></label>
-                                        </div>
-                                        <label class="fw-900 mt-15">Item Condition</label>
-                                        <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox11" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox11"><span>New (1506)</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox21" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox21"><span>Refurbished (27)</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox31" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox31"><span>Used (45)</span></label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i> Fillter</a>
-                            </div>
-                            <!-- Product sidebar Widget -->
-                            <div class="sidebar-widget product-sidebar mb-30 p-30 bg-grey border-radius-10">
-                                <h5 class="section-title style-1 mb-30">New products</h5>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="{% static 'assets/imgs/shop/thumbnail-3.jpg' %}" alt="#" />
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h5><a href="shop-product-detail.html">Chen Cardigan</a></h5>
-                                        <p class="price mb-0 mt-5">$99.50</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width: 90%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="{% static 'assets/imgs/shop/thumbnail-4.jpg' %}" alt="#" />
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h6><a href="shop-product-detail.html">Chen Sweater</a></h6>
-                                        <p class="price mb-0 mt-5">$89.50</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="{% static 'assets/imgs/shop/thumbnail-5.jpg' %}" alt="#" />
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h6><a href="shop-product-detail.html">Colorful Jacket</a></h6>
-                                        <p class="price mb-0 mt-5">$25</p>
-                                        <div class="product-rate">  
-                                            <div class="product-rating" style="width: 60%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="banner-img wow fadeIn mb-lg-0 animated d-lg-block d-none">
-                                <img src="{% static 'assets/imgs/banner/banner-11.png' %}" alt="" />
-                                <div class="banner-text">
-                                    <span>Oganic</span>
-                                    <h4>
-                                        Save 17% <br /> on <span class="text-brand">Oganic</span><br /> Juice
-                                    </h4>
-                                </div>
                             </div>
                         </div>
                     </div>
