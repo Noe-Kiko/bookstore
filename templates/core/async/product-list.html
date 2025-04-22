@@ -9,9 +9,8 @@
                 </a>
             </div>
             <div class="product-action-1">
-                <a aria-label="Add To Wishlist" class="action-btn" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
+                <a aria-label="Add To Wishlist" class="action-btn" href="{% url 'core:wishlist' %}"><i class="fi-rs-heart"></i></a>
+                <a aria-label="Quick view" class="action-btn" href="{% url 'core:product-detail' p.pid %}" class="action-btn"><i class="fi-rs-eye"></i></a>
             </div>
             <div class="product-badges product-badges-position product-badges-mrg">
                 <span class="hot">-{{p.get_percentage|floatformat:0}}</span>
@@ -19,14 +18,14 @@
         </div>
         <div class="product-content-wrap">
             <div class="product-category">
-                <a href="{% url 'core:product-detail' p.pid %}">{{ p.category.title }}</a>
+                <a href="#">{{ p.category.title }}</a>
             </div>
-            <h2><a href="shop-product-right.html">{{ p.title }}</a></h2>
+            <h2><a href="{% url 'core:product-detail' p.pid %}">{{ p.title }}</a></h2>
             <div class="product-rate-cover">
                 <div class="product-rate d-inline-block">
                     <div class="product-rating" style="width: 90%"></div>
                 </div>
-                <span class="font-small ml-5 text-muted"> (4.0)</span>
+                <span class="font-small ml-5 text-muted">({{ p.reviews.all.count }})</span>
             </div>
             <div>
                 <span class="font-small text-muted">By <a href="vendor-details-1.html">{{ p.vendor.title }}</a></span>
@@ -37,7 +36,7 @@
                     <span class="old-price">{{p.old_price}}</span>
                 </div>
                 <div class="add-cart">
-                    <a class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                    <a class="add" href="{% url 'core:cart' %}"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
                 </div>
             </div>
         </div>
