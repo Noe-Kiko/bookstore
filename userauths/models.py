@@ -27,7 +27,10 @@ class Profile(models.Model):
     image = models.ImageField(upload_to="image", null=True, blank=True)
     full_name = models.CharField(max_length=50, null=True, blank=True)
     bio = models.CharField(max_length=300, null=True, blank=True)
-    phone = models.CharField(max_length=15, null=True, blank=True) 
+
+    # Originally phone number was set to length 15 but incase user wants to add spaces or dashes,
+    # having a larger max_length ensures they'll be able too.
+    phone = models.CharField(max_length=30, null=True, blank=True) 
     address = models.CharField(max_length=200, null=True, blank=True) 
     country = models.CharField(max_length=60, null=True, blank=True) 
     verified = models.BooleanField(default=False, null=True, blank=True)
