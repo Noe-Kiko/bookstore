@@ -44,7 +44,6 @@ urlpatterns = [
     path("delete-from-cart/", delete_item_from_cart, name = "delete-from-cart"),
 
     path("update-cart/", update_cart, name = "update-cart"),
-    #################### Cart Views  #################### 
 
 
     ####################  CHECKOUT VIEWS ####################
@@ -58,7 +57,6 @@ urlpatterns = [
     # For stripe
     path("api/create_checkout_session/<oid>/", createCheckoutSession, name="api_checkout_session"),
 
-    ####################  CHECKOUT VIEWS ####################
 
 
     #################### Payment Views  #################### 
@@ -68,7 +66,6 @@ urlpatterns = [
     path('payment-completed/<oid>/', paypalCompletedView, name="payment-completed"),
 
     path('payment-failed/', paypalFailedView, name="payment-failed"),
-    #################### Payment Views  #################### 
 
 
     #################### User Info Views  #################### 
@@ -76,14 +73,13 @@ urlpatterns = [
     path('dashboard/', dashboard, name="dashboard"),
     path('dashboard/order/<int:id>', orderDetail, name="order-detail"),
     path("make-default-address/", defaultAddress , name="make-default-address"),
-    #################### User Info Views  #################### 
 
 
     #################### Wishlists Views  #################### 
     path ("wishlist/", wishlistView, name="wishlist"),
     path("add-to-wishlist/", addToWishList, name="add-to-wishlist"), 
     path("remove-from-wishlist/", removeFromWishlist, name="remove-from-wishlist"), 
-    #################### Wishlists Views #################### 
+
 
     # Contact Views
     path("contact/", contact, name="contact"),

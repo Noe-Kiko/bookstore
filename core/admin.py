@@ -13,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['title', 'category_image']
 
 class VendorAdmin(admin.ModelAdmin):
-    list_display = ['title', 'vendor_image']
+    list_display = ['vendor_title', 'vendor_image']
 
 # orderdate comes from Cart Order in models.py 
 class CartOrderAdmin(admin.ModelAdmin):

@@ -40,8 +40,7 @@
                     <section class="home-slider position-relative mb-30">
                         <div class="home-slide-cover mt-30">
                             <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
-                                <div class="single-hero-slider single-animation-wrap" style="background-image: url({% static 'assets/imgs/theme/shelfspacebanner.png' %})">
-                                    <div class="slider-content">
+                                <div class="single-hero-slider single-animation-wrap" style="background-image: url({% static 'assets/imgs/theme/shelfspacebanner.png' %})">                                    <div class="slider-content">
                                     </div>
                                 </div>
                                 <div class="single-hero-slider single-animation-wrap" style="background-image: url('https://tpfcu.com/wp-content/uploads/2023/10/quarters-stacked-on-a-table-and-a-jar-with-a-growing-sprout.jpg')">
@@ -78,7 +77,7 @@
                                                 </div>
                                                 <div class="product-action-1">
                                                     <a aria-label="Add To Wishlist" class="action-btn" href="{% url 'core:wishlist' %}"><i class="fi-rs-heart"></i></a>
-                                                    <a href="{% url 'core:product-detail' p.pid %}" class="action-btn"><i class="fi-rs-eye"></i></a>
+                                                    <a aria-label="Quick view" class="action-btn" href="{% url 'core:product-detail' p.pid %}" class="action-btn"><i class="fi-rs-eye"></i></a>
                                                 </div>
                                                 <div class="product-badges product-badges-position product-badges-mrg">
                                                     <span class="hot">-{{p.get_percentage|floatformat:0}}</span>
@@ -96,8 +95,7 @@
                                                     <span class="font-small ml-5 text-muted">({{ p.reviews.all.count }})</span>
                                                 </div>
                                                 <div>
-                                                    <span class="font-small text-muted">By <a href="vendor-details-1.html">{{ p.vendor.title }}</a></span>
-                                                </div>
+                                                    <span class="font-small text-muted">By <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{ p.vendor.title }}</a></span>                                                </div>
                                                 <div class="product-card-bottom">
                                                     <div class="product-price">
                                                         <span class="current-product-price">${{p.price}}</span>
@@ -108,8 +106,6 @@
                                                         <input type="hidden" class="product-pid-{{p.id}}" value="{{p.pid}}">
                                                         <input type="hidden" class="product-image-{{p.id}}" value="{{p.image.url}}">
                                                         <input type="hidden" class="product-title-{{p.id}}" value="{{p.title}}">
-
-                                                        <!-- DIV Reponsible for adding to wishlist -->
                                                         <div class="d-flex">
                                                             <button class="add add-to-cart-btn" data-index="{{p.id}}"><i class="fi-rs-shopping-cart mr-5"></i>Add</button>
                                                             <button style="border: none; background: none;" class="add-to-wishlist" data-product-item="{{p.id}}"><i
@@ -164,7 +160,7 @@
                     </section>
                 </div>
                 <div class="col-lg-1-5 primary-sidebar sticky-sidebar pt-30">
-                    <!-- Fillter By Price -->
+                    <!-- Filter By Price -->
                     <div class="sidebar-widget price_range range mb-30">
                         <h5 class="section-title style-1 mb-30">Fill by price</h5>
                         <div class="price-filter">
@@ -185,5 +181,4 @@
             </div>
         </div>
     </main>
-
 {% endblock content %}

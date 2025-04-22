@@ -176,10 +176,10 @@ Below is responsible for some design features in local machines admin page
 '''
 
 JAZZMIN_SETTINGS = {
-    'site_header': "Noe's Bookshop",
+    'site_header': "Shelf Space",
     'site_brand': "You Buy, We Supply!",
     'site_logo': 'assets/imgs/theme/superuser.png',
-    'site_copyright': "Noe's Bookshop",
+    'site_copyright': "Shelf Space",
 
 }
 
@@ -228,7 +228,7 @@ CKEDITOR_5_CONFIGS = {
 ############################  PAYPAL SETTINGS  ############################
 
 # Below it's important to use business email
-PAYPAL_RECEIVER_EMAIL = 'noesandbox1@gmail.com' 
+PAYPAL_RECEIVER_EMAIL = 'shelfspacemarket@gmail.com' 
 
 PAYPAL_TEST = True
 

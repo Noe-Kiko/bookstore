@@ -59,24 +59,20 @@ class Tags(models.Model):
     pass
 
 ########################
-# Sort of like Amazon and TikTok shop where there are vendors to sell items too! 
+
+# Inside of /admin/ the moderator(superuser) will have to fill out form for user to become a vendor
 class Vendor(models.Model):
     vid = ShortUUIDField(unique=True, length=10, max_length=30, prefix="vendor", alphabet="abcdefg12345")
 
-    title = models.CharField(max_length=100, default="Vendor name")
-    image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
-    cover_image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
+    vendor_title = models.CharField(max_length=100, default="Vendor name")
+    vendor_profile_image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
+    vendor_banner = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
 
     description = CKEditor5Field(null = True, blank = True, default = "Describe yourself!")
     
-    address = models.CharField(max_length=100, default = "Vendor's Address")
-    contact = models.CharField(max_length=100, default = "(732) - 123 - 4567")
-    chat_resp_time = models.CharField(max_length=100, default = "100")
-    authentic_rating = models.CharField(max_length=100, default = "N/A")
-    shipping_on_time = models.CharField(max_length=100, default = "100%")
-    vendor_rating = models.CharField(max_length=100, default = "100")
-    days_return = models.CharField(max_length=100, default="30")
-    warranty_period = models.CharField(max_length=100, default="30")
+    vendor_address = models.CharField(max_length=100, default = "Vendor's Address")
+    vendor_mobile = models.CharField(max_length=100, default = "(732) - 123 - 4567")
+    
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
@@ -84,10 +80,10 @@ class Vendor(models.Model):
         verbose_name_plural = "Vendors"
 
     def vendor_image(self):
-        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.vendor_profile_image.url))
     
     def __str__(self):
-        return self.title
+        return self.vendor_title
     
 ########################
 class Product(models.Model):
@@ -108,13 +104,11 @@ class Product(models.Model):
     stock_count = models.CharField(max_length=100, default="N/A", null=True, blank=True)
     condition = models.CharField(max_length=100, default="Organic", null=True, blank=True)
 
-    tags = TaggableManager(blank=True)
     product_status = models.CharField(choices=STATUS, max_length=10, default="in_review")
     status = models.BooleanField(default=True)
     in_stock = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
 
-    sku = ShortUUIDField(unique=True, length=5, max_length=30, prefix = "sku", alphabet="1234567890")
     date = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(null=True, blank=True)
 
@@ -239,4 +233,3 @@ class Coupon(models.Model):
 
     def __str__(self):
         return f"{self.code}"
-    

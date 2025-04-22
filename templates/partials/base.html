@@ -31,12 +31,6 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
                             <ul>
-                                <li><a href="{% url 'userauths:sign-up' %}">Sign-Up</a></li>
-                                {% if request.user.is_authenticated %}
-                                <li><a href="{% url 'userauths:sign-out' %}">Sign-Out</a></li>
-                                {% else %}
-                                <li><a href="{% url 'userauths:sign-in' %}">Sign-In</a></li>
-                                {% endif %}
                                 <li><a href="{% url 'vendoradmin:dashboard' %}">Vendor Dashboard</a></li>
                                 <li><a href="{% url 'core:wishlist' %}">Wishlist</a></li>
                                 <li><a href="{% url 'core:cart' %}">Cart</a></li>
@@ -162,6 +156,10 @@
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                             <nav>
                                 <ul>
+                                    <!--   SHOP TAB  -->
+                                    <li>
+                                        <a href="{% url 'core:product-list' %}">Shop All</a>
+                                    </li>
                                     <!--   CATEGORY TAB  -->
                                     <li>
                                         <a href="#">Category <i class="fi-rs-angle-down"></i></a>
@@ -174,16 +172,17 @@
 
                                         </ul>
                                     </li>
-                                    <!--   SHOP TAB  -->
-                                    <li>
-                                        <a href="{% url 'core:product-list' %}">Shop All</a>
-                                    </li>
+                                    <!--  VENDOR DROP DOWN -->
                                     <li>
                                         <a href="#">Vendors <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            <li><a href="vendors-list.html">Vendors List</a></li>
+                                            <li><a href="{url  'core:vendors-list'}">Vendors List</a></li>
                                             <li><a href="{% url 'vendoradmin:dashboard' %}">Vendor Dashboard</a></li>
                                         </ul>
+                                    </li>
+                                    <!--   BECOME A VENDOR TAB  -->
+                                    <li>
+                                        
                                     </li>
                                     <!--    PAGES TAB   -->
                                     <li>

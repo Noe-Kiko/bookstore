@@ -479,13 +479,14 @@ def dashboard(request):
 
 
 def orderDetail(request, id):
-     orders = CartOrder.objects.get(user=request.user, id=id)
+     order = CartOrder.objects.get(user=request.user, id=id)
      orderItems = CartOrderItems.objects.filter(order=order)
 
      context = {
-         "orderItems":orderItems,
+         "order": order,
+         "orderItems": orderItems,
      }
-     return render(request, "core/order-detail.html")
+     return render(request, "core/order-detail.html", context)
 
 def defaultAddress(request):
     id = request.GET['id']
@@ -547,7 +548,6 @@ def removeFromWishlist(request):
 
 def contact(request):
     return render(request, "core/contact.html")
-
 
 def ajax_contact_form(request):
     full_name = request.POST.get('full_name')
