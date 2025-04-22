@@ -1,31 +1,42 @@
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address
 from django.db.models import Min, Max, Count
-def default(request):
-    categories = Category.objects.all()
-    vendors = Vendor.objects.all()
+from django.db import DatabaseError
+from django.contrib import messages
 
-    # 
-    min_max_price = Product.objects.aggregate(Min("price"), Max("price"))
+def default(request):
+    try:
+        categories = Category.objects.all()
+    except DatabaseError:
+        categories = []
+        
+    try:
+        vendors = Vendor.objects.all()
+    except DatabaseError:
+        vendors = []
+
+    # Try to get min/max price, handle if table doesn't exist
+    try:
+        min_max_price = Product.objects.aggregate(Min("price"), Max("price"))
+    except DatabaseError:
+        min_max_price = {'price__min': 0, 'price__max': 1000}
     
     # if the user is successfully authenitcated (login)
     # We want to be able to fetch the users saved wishlist data
+    wishlist = 0
     if request.user.is_authenticated:
         try:
             wishlist = wishListModel.objects.filter(user=request.user)
-        except:
-            messages.warning(request, "You need to login before accessing your wishlist.")
-            wishlist = 0
-    # If the user isn't authenticated then theres no reason to fetch data from the database
-    else:
-        wishlist = 0
+        except DatabaseError:
+            # Don't show message here since it will appear on every page load
+            pass
 
-    try:
-        address = Address.objects.get(user=request.user)
-    except:
-        address = None
-        #or can write 
-        # except:
-        # address = None
+    # Try to get user address
+    address = None
+    if request.user.is_authenticated:
+        try:
+            address = Address.objects.get(user=request.user)
+        except:
+            pass
 
     return{
         'categories':categories,

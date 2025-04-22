@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
-from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address, Coupon
+from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address, Coupon, becomeVendorModel
 from django.db.models import Count, Avg
 from taggit.models import Tag
 from django.template.loader import render_to_string
@@ -612,3 +612,44 @@ def createCheckoutSession(request, oid):
     print("checkkout session", checkoutSession)
     return JsonResponse({"sessionId": checkoutSession.id})
     
+# We want the user to be logged in because it'll allow us to find out 
+# which EXACT user sent the form, therefore we select the correct user to become vendor 
+
+@login_required
+def become_vendor(request):
+    return render(request, "core/become-vendor.html")
+
+@login_required
+def vendor_application_form(request):
+    full_name = request.POST.get('full_name')
+    email = request.POST.get('email')
+    phone = request.POST.get('phone')
+    business_name = request.POST.get('business_name')
+    business_description = request.POST.get('business_description')
+
+    # Create vendor application with user association
+    vendor_application = becomeVendorModel(
+        user=request.user,  # Associate with the logged-in user
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        business_name=business_name,
+        business_description=business_description,
+    )
+    
+    # Handle image uploads
+    if 'vendor_profile_image' in request.FILES:
+        vendor_application.vendor_profile_image = request.FILES['vendor_profile_image']
+        
+    if 'vendor_banner' in request.FILES:
+        vendor_application.vendor_banner = request.FILES['vendor_banner']
+    
+    # Save the application with all data
+    vendor_application.save()
+
+    data = {
+        "bool": True,
+        "message": "Application Submitted Successfully! We'll review your details and contact you soon."
+    }
+
+    return JsonResponse({"data":data})

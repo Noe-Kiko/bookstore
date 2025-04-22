@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address, Coupon
+from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address, Coupon, becomeVendorModel
 # Register your models here.
 
 class ProductImagesAdmin(admin.TabularInline): 
@@ -33,6 +33,11 @@ class AddressAdmin(admin.ModelAdmin):
     list_editable = ['address','status',]
     list_display = ['user', 'address', 'status']
 
+class VendorApplicationAdmin(admin.ModelAdmin):
+    list_display = ['user', 'full_name', 'business_name', 'email', 'date']
+    list_filter = ['date', 'user']
+    search_fields = ['full_name', 'email', 'business_name', 'user__username']
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Vendor, VendorAdmin)
@@ -42,3 +47,4 @@ admin.site.register(productReview, ProductReviewAdmin)
 admin.site.register(wishListModel, WishlistsAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Coupon)
+admin.site.register(becomeVendorModel, VendorApplicationAdmin)

@@ -233,3 +233,28 @@ class Coupon(models.Model):
 
     def __str__(self):
         return f"{self.code}"
+
+########################
+# Path for vendor application uploads
+def vendor_application_path(instance, filename):
+    # Use the business name in the path for better organization
+    business_name = instance.business_name.replace(" ", "_").lower()
+    return 'vendor_applications/{0}/{1}'.format(business_name, filename)
+
+########################
+class becomeVendorModel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="vendor_applications")  # Store the user who applied
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    business_name = models.CharField(max_length=100)
+    business_description = models.TextField()
+    vendor_profile_image = models.ImageField(upload_to=vendor_application_path, default="vendor.jpg")
+    vendor_banner = models.ImageField(upload_to=vendor_application_path, default="vendor.jpg")
+    date = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Vendor Applications"
+        
+    def __str__(self):
+        return f"{self.business_name} by {self.user.username if self.user else 'Unknown'}"

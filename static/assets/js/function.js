@@ -348,7 +348,7 @@ if (typeof jQuery === 'undefined') {
                 console.log("Adding to wishlist...")
             },
             success: function (response) {
-                // this_val.html("✓")
+                
                 this_val.html("<i class='fas fa-heart text-danger'></i>")
                 if (response.bool === true) {
                     console.log("Added to wishlist...");
@@ -432,54 +432,40 @@ if (typeof jQuery === 'undefined') {
         })
     })
 
+    // Vendor Application Form
+    $(document).on("submit", "#vendor-application-form", function (e) {
+        e.preventDefault()
+        console.log("Vendor Application Submitted...");
 
+        // Create FormData object to handle file uploads
+        let formData = new FormData(this);
+        
+        $.ajax({
+            url: "/vendor-application-form/",
+            data: formData,
+            type: "POST",
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            beforeSend: function () {
+                console.log("Sending Application Data to Server...");
+                $("#vendor-form-btn").text("Submitting...").prop("disabled", true);
+            },
+            success: function (res) {
+                console.log("Sent Application Data to server!");
+                $(".vendor_app_p").hide()
+                $("#vendor-application-form").hide()
+                $("#message-response").html(res.data.message)
+                $("#vendor-form-btn").text("Submit Application").prop("disabled", false);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error submitting application:", error);
+                console.log("Status:", status);
+                console.log("Response:", xhr.responseText);
+                $("#message-response").html("Error submitting application. Please try again.").css("color", "red");
+                $("#vendor-form-btn").text("Submit Application").prop("disabled", false);
+            }
+        })
+    })
 
-    // Responsible to tell user whether the price is possible or not 
-    // Let me explain: If the minimum price on the entire shop is $2 and the user filters 
-    // looking for a product for $1, they will be prompted a message on their browser telling them 
-    // the range of prices for the filter slider to work
-
-
-    // Cart functionality
-    // Whenever the user clicks on the quantity field we're going to grab
-    // the product id and the name of the product 
-
-
-    /////////// THIS IS THE OLD ADD TO CART BUTTON /////////
-
-    // $("#add-to-cart-btn").on("click", function(){
-    //     let quantity = $("#product-quantity").val()
-    //     let product_title = $(".product-title").val()
-    //     let product_id = $(".product-id").val()
-    //     // in product-detail.hmtl the price we see is a text field not val
-    //     let product_price = $("#current-product-price").text()
-
-    //     console.log("Quantity: ", quantity);
-    //     console.log("Title: ", product_title);
-    //     console.log("Price: ", product_price);
-    //     console.log("ID: ", product_id);
-    //     console.log("Current Element: ", this_val);
-
-    //     $.ajax({
-    //         url: 'add-to-cart',
-    //         data:{
-    //             'id': product_id, 
-    //             'quantity': quantity,
-    //             'title':product_title,
-    //             'price':product_price,
-
-    //         },
-    //         dataType: 'json',
-    //         beforeSend: function(response){
-    //             console.log("Adding Products to Cart...");
-    //         },
-    //         sucess:function(response){
-    //             this_val.html("Successfully Added Products to Cart")
-    //             console.log("Successfully Added Products to Cart");
-    //             $(".cart-items-count").text(response.totalcartitems)
-    //         }
-    //     })
-    // })
-
-    ///////////////// NEW ADD TO CART BUTTON ///////////////
 }

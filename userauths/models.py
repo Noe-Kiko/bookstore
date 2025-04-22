@@ -9,6 +9,10 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 
 
+# Define user_directory_path function first
+def user_directory_path(instance, filename):
+    return 'user_{0}/{1}'.format(instance.user.id if hasattr(instance, 'user') else 'vendor', filename)
+
 # UserModel 
 class User(AbstractUser):
     # We want to make sure that no one is using the same email for another account
@@ -27,9 +31,6 @@ class Profile(models.Model):
     image = models.ImageField(upload_to="image", null=True, blank=True)
     full_name = models.CharField(max_length=50, null=True, blank=True)
     bio = models.CharField(max_length=300, null=True, blank=True)
-
-    # Originally phone number was set to length 15 but incase user wants to add spaces or dashes,
-    # having a larger max_length ensures they'll be able too.
     phone = models.CharField(max_length=30, null=True, blank=True) 
     address = models.CharField(max_length=200, null=True, blank=True) 
     country = models.CharField(max_length=60, null=True, blank=True) 
@@ -68,3 +69,21 @@ def save_user_profile(sender, instance, **kwargs):
  
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)    
+
+# After the ContactUs model, the becomeVendorForm is likely defined
+# Let's fix it to use the user_directory_path function we just defined
+class becomeVendorForm(models.Model):
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    business_name = models.CharField(max_length=100)
+    business_description = models.TextField()
+    vendor_profile_image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
+    vendor_banner = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
+    date = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name_plural = "Vendor Applications (Old)"
+        
+    def __str__(self):
+        return self.business_name    

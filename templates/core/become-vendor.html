@@ -1,0 +1,96 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+<!--  Vendor Application Form  -->
+    <main class="main pages">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="{% url 'core:index' %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span>Become a Vendor
+                </div>
+            </div>
+        </div>
+        <div class="page-content pt-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-12 m-auto">
+                        <section class="row align-items-end mb-50">
+                            <div class="col-lg-4 mb-lg-0 mb-md-5 mb-sm-5">
+                                <h4 class="mb-20 text-brand">Start Selling with Us</h4>
+                                <h1 class="mb-15">Become a Vendor</h1>
+                                <p class="mb-30 fs-6">Join our marketplace and reach thousands of customers. Fill out the form below to apply!</p>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-12 m-auto">
+                        <section class="mb-50">
+                            <div class="row">
+                                <div class="col-xl-8">
+                                    <div class="contact-from-area padding-20-row-col">
+                                        <h2 class="text-brand mb-10">Vendor Application Form</h2>
+                                        <h5 class="mb-10">Vendor Information</h5>
+                                        <p class="text-muted mb-30 font-sm vendor_app_p">Please provide accurate information to help us review your application.</p>
+                                        <h4 class="text-success" id="message-response"></h4>
+                                        <form class="contact-form-style mt-30" id="vendor-application-form" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="input-style mb-20">
+                                                        <input name="full_name" id="full_name" placeholder="Your Full Name" type="text" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="input-style mb-20">
+                                                        <input name="email" id="email" placeholder="Your Email" type="email" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="input-style mb-20">
+                                                        <input name="phone" id="phone" placeholder="Contact Phone" type="tel" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="input-style mb-20">
+                                                        <input name="business_name" id="business_name" placeholder="Business Name" type="text" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12">
+                                                    <div class="textarea-style mb-30">
+                                                        <textarea name="business_description" id="business_description" placeholder="Tell us about your business, products, and experience..." required></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="input-style mb-20">
+                                                        <label for="vendor_profile_image" class="form-label">Vendor Profile Image</label>
+                                                        <input name="vendor_profile_image" id="vendor_profile_image" type="file" required />
+                                                        <small class="text-muted">Please upload a profile image</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="input-style mb-20">
+                                                        <label for="vendor_banner" class="form-label">Vendor Banner Image</label>
+                                                        <input name="vendor_banner" id="vendor_banner" type="file" required />
+                                                        <small class="text-muted">Please upload a banner image (recommended: 1000x500px)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12">
+                                                    <button id="vendor-form-btn" class="submit submit-auto-width" type="submit">Submit Application</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <p class="form-messege"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}
