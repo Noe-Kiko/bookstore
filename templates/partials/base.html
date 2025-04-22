@@ -32,7 +32,11 @@
                         <div class="header-info">
                             <ul>
                                 <li><a href="{% url 'userauths:sign-up' %}">Sign-Up</a></li>
-                                <li><a href="{% url 'core:dashboard' %}">My Account</a></li>
+                                {% if request.user.is_authenticated %}
+                                <li><a href="{% url 'userauths:sign-out' %}">Sign-Out</a></li>
+                                {% else %}
+                                <li><a href="{% url 'userauths:sign-in' %}">Sign-In</a></li>
+                                {% endif %}
                                 <li><a href="{% url 'vendoradmin:dashboard' %}">Vendor Dashboard</a></li>
                                 <li><a href="{% url 'core:wishlist' %}">Wishlist</a></li>
                                 <li><a href="{% url 'core:cart' %}">Cart</a></li>
@@ -58,7 +62,6 @@
                     </div>
                 </div>
             </div>
-            <!--  BASE TOP OF SCREEN   -->
         </div>
         <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
             <!--  SECOND BASE BLOCK TOP OF SCREEN   -->
@@ -184,9 +187,9 @@
                                     </li>
                                     <!--    PAGES TAB   -->
                                     <li>
-                                        <a href="#">Pages <i class="fi-rs-angle-down"></i></a>
+                                        <a href="#">Registration <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            <li><a href="{% url 'core:dashboard' %}">My Account</a></li>
+                                            <li><a href="{% url 'userauths:sign-up' %}">Sign-Up</a></li>
                                             <li><a href="page-login.html">Login</a></li>
                                             <li><a href="page-register.html">Register</a></li>
                                             <li><a href="page-forgot-password.html">Forgot password</a></li>
@@ -267,10 +270,11 @@
                     </button>
                 </div>
             </div>
+            <!--   SEARCH FEATURE FOR MOBILE UI   -->
             <div class="mobile-header-content-area">
                 <div class="mobile-search search-style-3 mobile-header-border">
-                    <form action="#">
-                        <input type="text" placeholder="Search for items…" />
+                    <form action="{% url 'core:search' %}" method="GET">
+                        <input type="text" name="q" placeholder="Search" />
                         <button type="submit"><i class="fi-rs-search"></i></button>
                     </form>
                 </div>
@@ -282,10 +286,17 @@
                                 <a href="{% url 'core:index' %}">Home</a>
                             </li>
                             <li class="menu-item-has-children">
+                                {% if request.user.is_authenticated %}
+                                <a href="{% url 'userauths:sign-out' %}">Sign-Out</a>
+                                {% else %}
+                                <a href="{% url 'userauths:sign-in' %}">Sign-In</a>
+                                {% endif %}
+                            </li>
+                            <li class="menu-item-has-children">
                                 <a href="shop-grid-right.html">shop</a>
                                 <ul class="dropdown">
-                                    <li><a href="shop-grid-right.html">Shop All Books</a></li>
-                                    <li><a href="{% url 'core:wishlist' %}">Wishlist</a></li>
+                                    <li><a href="{% url 'core:product-list' %}">Shop All Books</a></li>
+                                    <li><a href="{% url 'core:category-list' %}">Shop by Category</a></li>
                                 </ul>
                             </li>
                             <li class="menu-item-has-children">
@@ -296,16 +307,16 @@
                                 </ul>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="#">Pages</a>
+                                <a href="#">Profile</a>
                                 <ul class="dropdown">
-                                    <li><a href="page-about.html">About Us</a></li>
-                                    <li><a href="{% url 'core:contact' %}">Contact</a></li>
-                                    <li><a href="{% url 'core:dashboard' %}">My Account</a></li>
                                     <li><a href="{% url 'userauths:sign-in' %}">Login</a></li>
-                                    <li><a href="page-register.html">Register</a></li>
-                                    <li><a href="page-forgot-password.html">Forgot password</a></li>
+                                    <li><a href="{% url 'core:dashboard' %}">My Account</a></li>
+                                    <li><a href="{% url 'vendoradmin:dashboard' %}">Vendor Dashboard</a></li>
                                     <li><a href="page-reset-password.html">Reset password</a></li>
                                 </ul>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'core:contact' %}">Contact</a>
                             </li>
                         </ul>
                     </nav>
@@ -313,13 +324,14 @@
                 </div>
                 <div class="mobile-header-info-wrap">
                     <div class="single-mobile-header-info">
-                        <a href="{% url 'core:contact' %}"><i class="fi-rs-marker"></i> Our location </a>
+                        <a href="https://www.google.com/maps/place/Green+Lane+Academic+Building+%5BGLAB%5D/@40.6828246,-74.2388303,17z/data=!3m1!4b1!4m6!3m5!1s0x89c3ad435b4c0dfd:0x95ccbf1c2ffea977!8m2!3d40.6828246!4d-74.2362554!16s%2Fg%2F11c56rb2c0?entry=ttu&g_ep=EgoyMDI1MDQxNi4xIKXMDSoASAFQAw%3D%3D" target="_blank"><i class="fi-rs-marker"></i> Our location </a>
                     </div>
                     <div class="single-mobile-header-info">
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'userauths:sign-out' %}"><i class="fi-rs-user"></i>Sign Out</a>
+                        {% else %}
                         <a href="{% url 'userauths:sign-in' %}"><i class="fi-rs-user"></i>Log In / Sign Up </a>
-                    </div>
-                    <div class="single-mobile-header-info">
-                        <a href="#"><i class="fi-rs-headphones"></i>(+01) - 2345 - 6789 </a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="site-copyright">All rights reserved to Shelf Space</div>
@@ -358,7 +370,7 @@
                                 <a href="{% url 'core:index' %}" class="mb-15"><img src="{% static 'assets/imgs/theme/sslogofin.svg' %}" alt="logo" style="width: 150px; height: 150px;"/></a>
                             </div>
                             <ul class="contact-infor">
-                                <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>Union, 07033, NJ</span></li>
+                                <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span><a href="https://www.google.com/maps/place/Green+Lane+Academic+Building+%5BGLAB%5D/@40.6828246,-74.2388303,17z/data=!3m1!4b1!4m6!3m5!1s0x89c3ad435b4c0dfd:0x95ccbf1c2ffea977!8m2!3d40.6828246!4d-74.2362554!16s%2Fg%2F11c56rb2c0?entry=ttu&g_ep=EgoyMDI1MDQxNi4xIKXMDSoASAFQAw%3D%3D" target="_blank">Union, 07033, NJ</a></span></li>
                                 <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Call Us:</strong><span>(+1) 732- 123 - 4567</span></li>
                                 <li><img src="{% static 'assets/imgs/theme/icons/icon-email-2.svg' %}" alt="" /><strong>Email: </strong><span>shelfspacemarket@gmail.com</span></li>
                             </ul>
@@ -373,7 +385,11 @@
                     <div class="footer-link-widget col">
                         <h4 class="widget-title">Account</h4>
                         <ul class="footer-list mb-sm-5 mb-md-0">
+                            {% if request.user.is_authenticated %}
+                            <li><a href="{% url 'userauths:sign-out' %}">Sign Out</a></li>
+                            {% else %}
                             <li><a href="{% url 'userauths:sign-in' %}">Sign In</a></li>
+                            {% endif %}
                             <li><a href="{% url 'core:cart' %}">View Cart</a></li>
                             <li><a href="{% url 'core:wishlist' %}">My Wishlist</a></li>
                         </ul>
