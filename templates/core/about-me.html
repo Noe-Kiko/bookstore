@@ -1,0 +1,99 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <main class="main pages">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="{url 'core:index'}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> About Us
+                </div>
+            </div>
+        </div>
+        <div class="page-content pt-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-12 m-auto">
+                        <section class="row align-items-center mb-50">
+                            <div class="col-lg-6">
+                                <img src="{% static 'assets/imgs/theme/sslogobig.png' %}" alt="" class="border-radius-15 mb-md-3 mb-lg-0 mb-sm-4" style="max-width: 85%; border: 2px solid #f0f0f0; padding: 10px;" />
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="pl-25">
+                                    <h2 class="mb-30">Welcome to Shelf Space!</h2>
+                                    <p class="mb-25">Hey! This is Shelf Space a book marketplace where you can buy or sell any books you'd like. Here at shelf space you can 
+                                        find any any book that you'd like (if we have it in stock). If you'd like to purchase a book, you'll first have to create an account. If you'd like 
+                                        to become a vendor then feel free to click the "Become A Vendor" tab. Have fun browsing! 
+                                    </p>
+                                    <div class="carausel-3-columns-cover position-relative">
+                                        <div id="carausel-3-columns-arrows"></div>
+                                        <div class="carausel-3-columns" id="carausel-3-columns">
+                                            <img src="{% static '/assets/imgs/about/django-icon-svgrepo-com.svg' %}"/>
+                                            <img src="{% static '/assets/imgs/about/sqlite-svgrepo-com(1).svg' %}"/>
+                                            <img src="{% static '/assets/imgs/about/visual-studio-code-svgrepo-com.svg' %}"/>
+                                            <img src="{% static '/assets/imgs/about/python-svgrepo-com.svg' %}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <section class="container mb-50 d-none d-md-block">
+                <div class="row about-count">
+                    <div class="col-lg-1-5 col-md-6 text-center mb-lg-0 mb-md-5">
+                        <h1 class="heading-1"><span class="count">2</span></h1>
+                        <h4>Years at Middlesex County College</h4>
+                    </div>
+                    <div class="col-lg-1-5 col-md-6 text-center">
+                        <h1 class="heading-1"><span class="count">2</span></h1>
+                        <h4>Years at Kean University</h4>
+                    </div>
+                    <div class="col-lg-1-5 col-md-6 text-center">
+                        <h1 class="heading-1"><span class="count">1</span></h1>
+                        <h4>Fullstock Project Complete</h4>
+                    </div>
+                    <div class="col-lg-1-5 col-md-6 text-center">
+                        <h1 class="heading-1"><span class="count">24</span>+</h1>
+                        <h4>Team advisor</h4>
+                    </div>
+                    <div class="col-lg-1-5 text-center d-none d-lg-block">
+                        <h1 class="heading-1"><span class="count">26</span>+</h1>
+                        <h4>Products Sale</h4>
+                    </div>
+                </div>
+            </section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-12 m-auto">
+                        <section class="mb-50">
+                            <h2 class="title style-3 mb-40 text-center">Shelf Space Developer</h2>
+                            <div class="row">
+                                <div class="col-lg-4 mb-lg-0 mb-md-5 mb-sm-5">
+                                    <h1 class="mb-30">Description</h1>
+                                    <p>Hey! My name is Noe Condado-Lino and I'm currently a senior attending Kean University. Every senior is responsible for completing a capstone project which involves
+                                    having to implement all the knowledge gained from my years of attending the university. I decided to make the capstone project all alone to see if I was capable of developing a fullstack project. 
+                                    It's been a long journey with developing this website as I had started in January of 2025. I hope you enjoy!</p>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6">
+                                            <div class="team-card">
+                                                <img src="{% static 'assets/imgs/page/about-8.png' %}" alt="" />
+                                                <div class="content text-center">
+                                                    <h4 class="mb-5">Noe Condado-Lino</h4>
+                                                    <span>Student at Kean University</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

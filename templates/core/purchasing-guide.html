@@ -1,0 +1,100 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <main class="main pages">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="{% url 'core:index' %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> Purchase Guide
+                </div>
+            </div>
+        </div>
+        <div class="page-content pt-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-10 col-lg-12 m-auto">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <div class="single-page pr-30 mb-lg-0 mb-sm-5">
+                                    <div class="single-header style-2">
+                                        <h2>Purchase Guide</h2>
+                                    </div>
+                                    <div class="single-content mb-50">
+                                        <h3>1. Create An Account</h3>
+                                            <li>Email (required)</li>
+                                            <li>Password (required)</li>
+                                            <li>Username (required)</li>
+                                        <br>
+                                        <h3>2. Set Up Profile</h3>
+                                        <p>Head to the account icon on the top right of the site. A dropdown menu will then appear and click on "My Account" then you'll 
+                                            be direct to your dashboard. Here you'll then went to click on the "Profile" tab on the left hand center of the screen. Now click on the "Edit Profile" button</p>
+                                            <li>Name (required)</li>
+                                            <li>Bio (required)</li>
+                                            <li>Phone (required)</li>
+                                        <br>
+                                        <h3>3. Shop for a book and add to cart</h3>
+                                        <h3>4. Go to cart and proceed to checkout</h3>
+                                        <p>Here you'll see two payment methods; paypal and stripe. If you want to pay using paypal you'll need to head to sandbox.paypal.com and create an account. 
+                                            If you'll be using Stripe then head to the table below to view the stripe sandbox cards.</p>
+                                        <br>
+                                        <h3>5. Sandbox Credit Cards</h3>
+                                        <p>To prioritize your security and protect the privacy of students attending the Senior Showcase, I will not allow the use of personal credit card information. 
+                                            Instead, please use the provided sandbox credit cards for all testing purposes. Using your own personal credit card will automatically be rejected.
+                                        </p>
+                                        <ul>
+                                            <li>Visa</li>
+                                            <li>Mastercards</li>
+                                            <li>American Express</li>
+                                            <li>Discover</li>
+                                        </ul>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Brand</th>
+                                                        <th>Number</th>
+                                                        <th>CVC</th>
+                                                        <th>Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!--    -->
+                                                    <tr>
+                                                        <td>Visa</td>
+                                                        <td>4242 4242 4242 4242</td>
+                                                        <td>Any 3 digit number</td>
+                                                        <td>Any Future Date</td>
+                                                    </tr>
+                                                    <!--    -->
+                                                    <tr>
+                                                        <td>Mastercard</td>
+                                                        <td>5555 5555 5555 4444</td>
+                                                        <td>Any 3 digit number</td>
+                                                        <td>Any Future Date</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>American Express</td>
+                                                        <td>3782 822463 10005</td>
+                                                        <td>Any 4 digit number</td>
+                                                        <td>Any Future Date</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Discover</td>
+                                                        <td>6011 1111 1111 1117</td>
+                                                        <td>Any 3 digit number</td>
+                                                        <td>Any Future Date</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}

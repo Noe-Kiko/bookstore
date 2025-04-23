@@ -91,18 +91,17 @@ class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="category")
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, related_name="products")
-    title = models.CharField(max_length=100, default="Product Title")
+    title = models.CharField(max_length=100, default="Fahrenheit 451")
     image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
     description = CKEditor5Field(null = True, blank = True, default = "Here feel free to write anything about the book! Such as the wear, edition, covertype, and etc!")
 
     ###### CHANGED DEFAULT FROM FLOAT TO STR #####
     price = models.DecimalField(max_digits=10, decimal_places=2, default="9.99")
     old_price = models.DecimalField(max_digits=10, decimal_places=2, default="5.99")
-    ###### CHANGED DEFAULT FROM FLOAT TO STR #####
        
-    publishDate = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    publishDate = models.CharField(max_length=100, default="todays date")
     stock_count = models.CharField(max_length=100, default="N/A", null=True, blank=True)
-    condition = models.CharField(max_length=100, default="Organic", null=True, blank=True)
+    condition = models.CharField(max_length=100, default="used", null=True, blank=True)
 
     product_status = models.CharField(choices=STATUS, max_length=10, default="in_review")
     status = models.BooleanField(default=True)

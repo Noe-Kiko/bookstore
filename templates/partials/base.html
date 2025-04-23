@@ -31,6 +31,12 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="header-info">
                             <ul>
+                                <li><a href="{% url 'userauths:sign-up' %}">Sign-Up</a></li>
+                                {% if request.user.is_authenticated %}
+                                <li><a href="{% url 'userauths:sign-out' %}">Sign-Out</a></li>
+                                {% else %}
+                                <li><a href="{% url 'userauths:sign-in' %}">Sign-In</a></li>
+                                {% endif %}
                                 <li><a href="{% url 'vendoradmin:dashboard' %}">Vendor Dashboard</a></li>
                                 <li><a href="{% url 'core:wishlist' %}">Wishlist</a></li>
                                 <li><a href="{% url 'core:cart' %}">Cart</a></li>
@@ -45,13 +51,6 @@
                                     <li>In need of cash? Become a Vendor!</li>
                                 </ul>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-4">
-                        <div class="header-info header-info-right">
-                            <ul>
-                                <li>Need help? Call Us: <strong class="text-brand"> + 1800 900</strong></li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -135,7 +134,7 @@
                     <div class="header-nav d-none d-lg-flex">
                         <div class="main-categori-wrap d-none d-lg-block">
                             <a class="categories-button-active" href="#">
-                                <span class="fi-rs-apps"></span> <span class="et">Browse</span> All Categories
+                                <span class="fi-rs-apps"></span> <span class="et">Popular</span>Categories
                                 <i class="fi-rs-angle-down"></i>
                             </a>
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
@@ -172,33 +171,18 @@
 
                                         </ul>
                                     </li>
-                                    <!--  VENDOR DROP DOWN -->
+                                    <!--  VENDORS TAB   -->
                                     <li>
-                                        <a href="#">Vendors <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="{url  'core:vendors-list'}">Vendors List</a></li>
-                                            <li><a href="{% url 'vendoradmin:dashboard' %}">Vendor Dashboard</a></li>
-                                        </ul>
+                                        <a href="{% url 'core:vendor-list' %}">Vendors</a>
                                     </li>
-                                    <!--   BECOME A VENDOR TAB  -->
+                                    <!--    BECOME A VENDOR TAB   -->
+                                    <li class="menu-item-has-children">
+                                        <a href="{% url 'core:become-vendor' %}">Become A Vendor</a>
+                                    </li>
                                     <li>
-                                        <a href="{% url 'core:become-vendor' %}">Become a Vendor</a>
+                                        <a href="{% url 'core:purchasing-guide' %}">Purchasing Guide</a>
                                     </li>
-                                    <!--    PAGES TAB   -->
-                                    <li>
-                                        <a href="#">Registration <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="{% url 'userauths:sign-up' %}">Sign-Up</a></li>
-                                            <li><a href="page-login.html">Login</a></li>
-                                            <li><a href="page-register.html">Register</a></li>
-                                            <li><a href="page-forgot-password.html">Forgot password</a></li>
-                                            <li><a href="page-reset-password.html">Reset password</a></li>
-                                            <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
-                                            <li><a href="page-privacy-policy.html">Privacy Policy</a></li>
-                                            <li><a href="page-terms.html">Terms of Service</a></li>
-                                            <li><a href="page-404.html">404 Page</a></li>
-                                        </ul>
-                                    </li>
+                                    <!--    CONTACT TAB   -->
                                     <li>
                                         <a href="{% url 'core:contact' %}">Contact</a>
                                     </li>
@@ -278,7 +262,7 @@
                     </form>
                 </div>
                 <div class="mobile-menu-wrap mobile-header-border">
-                    <!-- mobile menu start -->
+                    <!-- BEGINNING OF MOBILE MENU SECTION -->
                     <nav>
                         <ul class="mobile-menu font-heading">
                             <li class="menu-item-has-children">
@@ -306,20 +290,29 @@
                                 </ul>
                             </li>
                             <li class="menu-item-has-children">
-                                <a href="#">Profile</a>
+                                <a href="#">Registration</a>
                                 <ul class="dropdown">
-                                    <li><a href="{% url 'userauths:sign-in' %}">Login</a></li>
+                                    <li><a href="{% url 'core:about-me' %}">About Us</a></li>
                                     <li><a href="{% url 'core:dashboard' %}">My Account</a></li>
-                                    <li><a href="{% url 'vendoradmin:dashboard' %}">Vendor Dashboard</a></li>
-                                    <li><a href="page-reset-password.html">Reset password</a></li>
+                                    <li><a href="{% url 'userauths:sign-in' %}">Login</a></li>
+                                    <li><a href="{% url 'userauths:sign-up' %}">Register</a></li>
                                 </ul>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'core:become-vendor' %}">Become A Vendor</a>
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="{% url 'core:contact' %}">Contact</a>
                             </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'core:purchasing-guide' %}">Purchasing Guide</a>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="{% url 'core:about-me' %}">About Us</a>
+                            </li>
                         </ul>
                     </nav>
-                    <!-- mobile menu end -->
+                    <!-- THE END OF MOBILE MENU SECTION-->
                 </div>
                 <div class="mobile-header-info-wrap">
                     <div class="single-mobile-header-info">

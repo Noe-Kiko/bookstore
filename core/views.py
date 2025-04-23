@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, wishListModel, ProductImages, productReview, Address, Coupon, becomeVendorModel
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Min, Max
 from taggit.models import Tag
 from django.template.loader import render_to_string
 from core.forms import productReviewForm
@@ -40,9 +40,24 @@ def index(request):
 
 def product_list_view(request):
     products = Product.objects.filter(product_status="published")
+    
+    # Get min and max prices for the price filter
+    min_max_price = Product.objects.filter(product_status="published").aggregate(
+        price__min=Min('price'),
+        price__max=Max('price')
+    )
+    
+    # Set default values if None is returned
+    if min_max_price['price__min'] is None:
+        min_max_price['price__min'] = 0
+    if min_max_price['price__max'] is None:
+        min_max_price['price__max'] = 1000
 
     context = {
-        "products":products
+        "products": products,
+        "min_max_price": min_max_price,
+        "categories": Category.objects.all(),
+        "vendors": Vendor.objects.all(),
     }
     return render(request, 'core/product-list.html', context)
 
@@ -74,10 +89,26 @@ def vendor_list_view(request):
 
 def vendor_detail_view(request, vid):
     vendor = Vendor.objects.get(vid=vid)
+    sort_by = request.GET.get("sort", "featured")  # Default sort is featured
+    
     products = Product.objects.filter(vendor=vendor, product_status="published")
+    
+    # Apply sorting based on the sort parameter
+    if sort_by == "price_low_to_high":
+        products = products.order_by("price")
+    elif sort_by == "price_high_to_low":
+        products = products.order_by("-price")
+    elif sort_by == "release_date":
+        products = products.order_by("-date")
+    elif sort_by == "avg_rating":
+        products = products.order_by("-rating")
+    else:  # Default to featured (which we'll implement as newest)
+        products = products.order_by("-date")
+    
     context = {
-        "vendor":vendor,
-        "products":products,
+        "vendor": vendor,
+        "products": products,
+        "current_sort": sort_by,
     }
     return render(request, "core/vendor-detail.html", context)
 
@@ -653,3 +684,9 @@ def vendor_application_form(request):
     }
 
     return JsonResponse({"data":data})
+
+def aboutUs(request):
+    return render(request, "core/about-me.html")
+
+def purchasingGuide(request):
+    return render(request, "core/purchasing-guide.html")

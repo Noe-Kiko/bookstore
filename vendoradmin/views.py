@@ -8,8 +8,7 @@ from userauths.models import User
 from vendoradmin.forms import AddProductForm
 from vendoradmin.decorators import adminRequired
 import datetime
-
-
+from django.contrib.auth.hashers import check_password
 '''
 It may be getting confusing now, but here's a note for you (the reader) to understand what's going on here.
 Inside of the core directory and userauths directory you'll find yourself looking at similar python file names such as, 
@@ -75,14 +74,14 @@ def addProducts(request):
             # Many to many field below
             form.save_m2m()
             return redirect("vendoradmin:dashboard")
-        else:
-            form = AddProductForm()
+    else:
+        form = AddProductForm()
 
-        context = {
-            "form":form
-        }
+    context = {
+        "form": form
+    }
 
-        return render(request, "venoradmin/add-product.html", context)
+    return render(request, "vendoradmin/add-product.html", context)
     
 
 @adminRequired
@@ -162,13 +161,13 @@ def shopPage(request):
 
 @adminRequired
 def reviews(request):
-    reviews = productReview.objects.all
+    reviews = productReview.objects.all()
 
     context = {
         "reviews":reviews,
     }
 
-    return render(request, "", context)
+    return render(request, "vendoradmin/reviews.html", context)
 
 @adminRequired
 def settings(request):
@@ -177,11 +176,11 @@ def settings(request):
 
     if request.method == "POST":
         image = request.FILES.get("image")
-        full_name = request.FILES.get("full_name")
-        phone = request.FILES.get("phone")
-        bio = request.FILES.get("bio")
-        address = request.FILES.get("address")
-        coutnry = request.FILES.get("country")
+        full_name = request.POST.get("full_name")
+        phone = request.POST.get("phone")
+        bio = request.POST.get("bio")
+        address = request.POST.get("address")
+        country = request.POST.get("country")
 
         if image != None:
             profile.image = image
@@ -190,7 +189,7 @@ def settings(request):
         profile.phone = phone
         profile.bio = bio
         profile.address = address
-        profile.country = coutnry
+        profile.country = country
 
         profile.save()
         messages.success(request, "Profile updated successfully!")
@@ -207,20 +206,20 @@ def changePassword(request):
     user = request.user
 
     if request.method == "POST":
-        oldPassword = request.POST.get("oldPassword")
-        newPassword = request.POST.get("newPassword")
-        confirmNewPassword = request.POST.get("confirmNewPassword")
+        oldPassword = request.POST.get("old_password")
+        newPassword = request.POST.get("new_password")
+        confirmNewPassword = request.POST.get("confirm_new_password")
 
         if confirmNewPassword != newPassword:
-            messages.error(request, "Passowrd didn't match!")
-            return redirect("vendoradmin:changePassword")
+            messages.error(request, "Password didn't match!")
+            return redirect("vendoradmin:change_password")
         
         if check_password(oldPassword, user.password):
-            user.setPassword(newPassword)
+            user.set_password(newPassword)
             user.save()
             messages.success(request, "Changed Successfully!")
-            return redirect("vendoradmin:changePassword")
+            return redirect("vendoradmin:change_password")
         else:
             messages.error(request, "Old Password is Incorrect")
-            return redirect("vendoradmin:changePassword")
+            return redirect("vendoradmin:change_password")
     return render(request, "vendoradmin/change_password.html")

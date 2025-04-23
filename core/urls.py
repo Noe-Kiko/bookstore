@@ -2,7 +2,7 @@ from django.urls import path, include # We need inlcude for paypal integration
 from core.views import index, category_list_view, product_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, add_review
 from core.views import search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout, paypalCompletedView, paypalFailedView, createCheckoutSession
 from core.views import  dashboard, orderDetail, defaultAddress, wishlistView, addToWishList, removeFromWishlist, contact, ajax_contact_form, save_checkout, vendor_application_form, become_vendor
-
+from core.views import aboutUs, purchasingGuide
 app_name = "core"
 
 urlpatterns = [
@@ -85,11 +85,10 @@ urlpatterns = [
     path("contact/", contact, name="contact"),
     path("ajax-contact-form/", ajax_contact_form, name="ajax-contact-form"),
 
-    # Last minute additions 
 
     path("become-vendor/", become_vendor, name="become-vendor"),
     path("vendor-application-form/", vendor_application_form, name="vendor-application-form"),
 
-
-
+    path("about-me/", aboutUs, name="about-me"),
+    path("purchasing-guide/", purchasingGuide, name="purchasing-guide"),
 ]

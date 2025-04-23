@@ -29,7 +29,7 @@
                     <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
                     <div class="text">
                         <h6 class="mb-1 card-title">Orders</h6>
-                        <span>{{totalOrdersCount}}</span>
+                        <span>{{totalOrdersCount.count}}</span>
                     </div>
                 </article>
             </div>
@@ -40,7 +40,7 @@
                     <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
                     <div class="text">
                         <h6 class="mb-1 card-title">Products</h6>
-                        <span>{{allProducts}}</span>
+                        <span>{{allProducts.count}}</span>
                     </div>
                 </article>
             </div>
@@ -57,7 +57,6 @@
             </div>
         </div>
     </div>
-
     <div class="card mb-4">
         <header class="card-header">
             <h4 class="card-title">Recent Orders</h4>
@@ -72,7 +71,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="col-md-2 col-6">
                     <div class="custom_select">
                         <select class="form-select select-nice">

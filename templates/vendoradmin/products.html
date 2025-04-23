@@ -6,7 +6,7 @@
     <div class="content-header">
         <div>
             <h2 class="content-title card-title">Products List</h2>
-            <p>Manage all your products from here</p>
+            <p>Manage all your books from here</p>
         </div>
         <div>
             <a href="{% url 'vendoradmin:add_product' %}" class="btn btn-primary btn-sm rounded">Create Product</a>
@@ -15,7 +15,6 @@
     <div class="card mb-4">
         <header class="card-header">
             <div class="row align-items-center">
-                
                 <div class="col-md-2 col-6">
                     <select class="form-select">
                         <option selected>Status</option>
@@ -52,7 +51,5 @@
             {% endfor %}
         </div>
     </div>
-    
 </section>
-
 {% endblock content %}
