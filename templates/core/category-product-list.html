@@ -24,6 +24,35 @@
                         <div class="totall-product">
                             <p>We found <strong class="text-brand">{{products.count}}</strong> item{{products.count|pluralize}}</p>
                         </div>
+                        <div class="sort-by-product-area">
+                            <div class="sort-by-cover mr-10">
+                            </div>
+                            <div class="sort-by-cover">
+                                <div class="sort-by-product-wrap">
+                                    <div class="sort-by">
+                                        <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                    </div>
+                                    <div class="sort-by-dropdown-wrap">
+                                        <span>
+                                            {% if current_sort == 'featured' %}Featured
+                                            {% elif current_sort == 'price_low_to_high' %}Price: Low to High
+                                            {% elif current_sort == 'price_high_to_low' %}Price: High to Low
+                                            {% elif current_sort == 'release_date' %}Release Date
+                                            {% else %}Featured{% endif %}
+                                            <i class="fi-rs-angle-small-down"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="sort-by-dropdown">
+                                    <ul>
+                                        <li><a class="{% if current_sort == 'featured' %}active{% endif %}" href="?sort=featured">Featured</a></li>
+                                        <li><a class="{% if current_sort == 'price_low_to_high' %}active{% endif %}" href="?sort=price_low_to_high">Price: Low to High</a></li>
+                                        <li><a class="{% if current_sort == 'price_high_to_low' %}active{% endif %}" href="?sort=price_high_to_low">Price: High to Low</a></li>
+                                        <li><a class="{% if current_sort == 'release_date' %}active{% endif %}" href="?sort=release_date">Release Date</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="row product-grid">
                         {% for p in products %}

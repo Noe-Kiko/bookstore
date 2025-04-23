@@ -4,15 +4,19 @@
 {% block content %}  
 <section class="content-main">
     <div class="content-header">
-        <h2 class="content-title">Profile setting</h2>
+        <h2 class="content-title">Profile & Vendor Settings</h2>
     </div>
-    <div class="card">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Personal Profile</h4>
+        </div>
         <div class="card-body">
             <div class="row gx-5">
                 <div class="col-lg-12">
                     <section class="content-body p-xl-4">
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
+                            <input type="hidden" name="form_type" value="profile">
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="row gx-3">
@@ -50,19 +54,84 @@
                                             <img class="img-lg mb-3 img-avatar" src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png" alt="User Photo" />
                                         {% endif %}
                                         <figcaption>
+                                            <label class="form-label">Profile Photo</label>
                                             <input type="file" class="form-control-file" name="image">
                                         </figcaption>
                                     </figure>
                                 </aside>
                             </div>
                             <br />
-                            <button class="btn btn-primary" type="submit">Save changes</button>
+                            <button class="btn btn-primary" type="submit">Save Profile Changes</button>
                         </form>
                     </section>
                 </div>
             </div>
         </div>
     </div>
+
+    {% if vendor %}
+    <div class="card">
+        <div class="card-header">
+            <h4>Vendor Shop Settings</h4>
+        </div>
+        <div class="card-body">
+            <div class="row gx-5">
+                <div class="col-lg-12">
+                    <section class="content-body p-xl-4">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="form_type" value="vendor">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="row gx-3">
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Store Name</label>
+                                            <input class="form-control" name="vendor_title" type="text" value="{{vendor.vendor_title}}" placeholder="Enter store name" />
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Store Description</label>
+                                            <textarea class="form-control" name="description" rows="4" placeholder="Describe your store">{{vendor.description}}</textarea>
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <label class="form-label">Store Address</label>
+                                            <input class="form-control" name="vendor_address" value="{{vendor.vendor_address}}" type="text" placeholder="Store address" />
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <label class="form-label">Store Contact</label>
+                                            <input class="form-control" name="vendor_mobile" value="{{vendor.vendor_mobile}}" type="text" placeholder="Store contact number" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Store Profile Image</label>
+                                        <div class="text-center mb-3">
+                                            {% if vendor.vendor_profile_image %}
+                                                <img class="img-thumbnail" style="max-height: 150px;" src="{{vendor.vendor_profile_image.url}}" alt="Store Logo" />
+                                            {% endif %}
+                                        </div>
+                                        <input type="file" class="form-control" name="vendor_profile_image">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Store Banner Image</label>
+                                        <div class="text-center mb-3">
+                                            {% if vendor.vendor_banner %}
+                                                <img class="img-thumbnail" style="max-height: 100px; max-width: 100%;" src="{{vendor.vendor_banner.url}}" alt="Store Banner" />
+                                            {% endif %}
+                                        </div>
+                                        <input type="file" class="form-control" name="vendor_banner">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <button class="btn btn-primary" type="submit">Save Vendor Changes</button>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </section>
 
 {% endblock content %}  

@@ -5,7 +5,7 @@
 <!--   Notes as this might get confusing    -->
 <!--   category-list.html comes first then after clicking any category you'll go to category-product-list   -->
     <main class="main">
-        <div class="page-header mt-30 mb-75">
+        <div class="page-header mt-30 mb-20">
             <div class="container">
                 <div class="archive-header">
                     <div class="row align-items-center">
@@ -24,12 +24,37 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
-                        <div class="shop-product-fillter mb-50 pr-30">
+                        <div class="shop-product-fillter mb-20 pr-30">
                             <div class="totall-product">
                                 <h3>
                                     <img class="w-36px mr-10" alt="" />
                                     There are {{categories.count}} Categories
                                 </h3>
+                            </div>
+                            <div class="sort-by-product-area">
+                                <div class="sort-by-cover">
+                                    <div class="sort-by-product-wrap">
+                                        <div class="sort-by">
+                                            <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
+                                        </div>
+                                        <div class="sort-by-dropdown-wrap">
+                                            <span>
+                                                {% if current_sort == 'featured' %}Featured
+                                                {% elif current_sort == 'name_a_z' %}Name: A-Z
+                                                {% elif current_sort == 'name_z_a' %}Name: Z-A
+                                                {% else %}Featured{% endif %}
+                                                <i class="fi-rs-angle-small-down"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="sort-by-dropdown">
+                                        <ul>
+                                            <li><a class="{% if current_sort == 'featured' %}active{% endif %}" href="?sort=featured">Featured</a></li>
+                                            <li><a class="{% if current_sort == 'name_a_z' %}active{% endif %}" href="?sort=name_a_z">Name: A-Z</a></li>
+                                            <li><a class="{% if current_sort == 'name_z_a' %}active{% endif %}" href="?sort=name_z_a">Name: Z-A</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="loop-grid pr-30">
@@ -73,81 +98,35 @@
                                 <ul>
                                     {% for c in categories %}
                                     <li>
-                                        <a href="shop-grid-right.html"> <img src="{{c.image.url}}" alt="" />{{c.title}}</a><span class="count">{{c.category.count}}</span>
+                                        <a href="{% url 'core:category-product-list' c.cid %}"> <img src="{{c.image.url}}" alt="" />{{c.title}}</a><span class="count">{{c.category.count}}</span>
                                     </li>
                                     {% endfor %}
                                 </ul>
                             </div>
-                            <!-- Product sidebar Widget -->
-                            <div class="sidebar-widget product-sidebar mb-50 p-30 bg-grey border-radius-10">
-                                <h5 class="section-title style-1 mb-30">Trending Now</h5>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="assets/imgs/shop/thumbnail-3.jpg" alt="#" />
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h5><a href="shop-product-detail.html">Chen Cardigan</a></h5>
-                                        <p class="price mb-0 mt-5">$99.50</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width: 90%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="assets/imgs/shop/thumbnail-4.jpg" alt="#" />
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h6><a href="shop-product-detail.html">Chen Sweater</a></h6>
-                                        <p class="price mb-0 mt-5">$89.50</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="assets/imgs/shop/thumbnail-5.jpg" alt="#" />
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h6><a href="shop-product-detail.html">Colorful Jacket</a></h6>
-                                        <p class="price mb-0 mt-5">$25</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width: 60%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="single-post clearfix">
-                                    <div class="image">
-                                        <img src="assets/imgs/shop/thumbnail-6.jpg" alt="#" />
-                                    </div>
-                                    <div class="content pt-10">
-                                        <h6><a href="shop-product-detail.html">Lorem, ipsum</a></h6>
-                                        <p class="price mb-0 mt-5">$25</p>
-                                        <div class="product-rate">
-                                            <div class="product-rating" style="width: 60%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <!--Tags-->
                             <div class="sidebar-widget widget-tags mb-50 pb-10">
-                                <h5 class="section-title style-1 mb-30">Popular Tags</h5>
+                                <h5 class="section-title style-1 mb-30">Trending Searches</h5>
                                 <ul class="tags-list">
                                     <li class="hover-up">
-                                        <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Anime</a>
+                                        <a href="{% url 'core:search' %}?q=Anime"><i class="fi-rs-cross mr-10"></i>Anime</a>
                                     </li>
                                     <li class="hover-up">
-                                        <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Science</a>
+                                        <a href="{% url 'core:search' %}?q=Science"><i class="fi-rs-cross mr-10"></i>Science</a>
                                     </li>
                                     <li class="hover-up">
-                                        <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Smoothie</a>
+                                        <a href="{% url 'core:search' %}?q=Computer"><i class="fi-rs-cross mr-10"></i>Computer</a>
                                     </li>
                                     <li class="hover-up">
-                                        <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Fruit</a>
+                                        <a href="{% url 'core:search' %}?q=Entrepreneur"><i class="fi-rs-cross mr-10"></i>Entrepreneur</a>
+                                    </li>
+                                    <li class="hover-up">
+                                        <a href="{% url 'core:search' %}?q=Philosophy"><i class="fi-rs-cross mr-10"></i>Philosophy</a>
+                                    </li>
+                                    <li class="hover-up">
+                                        <a href="{% url 'core:search' %}?q=Fiction"><i class="fi-rs-cross mr-10"></i>Fiction</a>
                                     </li>
                                     <li class="hover-up mr-0">
-                                        <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Salad</a>
+                                        <a href="{% url 'core:search' %}?q=Fantasy"><i class="fi-rs-cross mr-10"></i>Fantasy</a>
                                     </li>
                                 </ul>
                             </div>

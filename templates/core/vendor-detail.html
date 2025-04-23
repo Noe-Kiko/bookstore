@@ -1,32 +1,32 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% block content %}
-<!--   ALLOWS CUSTOMERS TO VIEW A VENDORS PAGE  -->>
+<!--   ALLOWS CUSTOMERS TO VIEW A VENDORS PAGE  -->
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                    <span></span> Vendor <span></span> {{vendor.title}}
+                    <a href="{% url 'core:index' %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> Vendor <span></span> {{vendor.vendor_title}}
                 </div>
             </div>
         </div>
         <div class="container mb-30">
-            <div class="archive-header-3 mt-30 mb-80" style="background-image: url({{vendor.cover_image.url}})">
+            <div class="archive-header-3 mt-30 mb-80" style="background-image: url({{vendor.vendor_banner.url}})">
                 <div class="archive-header-3-inner">
                     <div class="vendor-logo mr-50">
-                        <img src="{{vendor.image.url}}" alt="" />
+                        <img src="{{vendor.vendor_profile_image.url}}" alt="" />
                     </div>
                     <div class="vendor-content">
                         <div class="product-category">
                             <span class="text-muted">Since {{vendor.date|date:"Y"}}</span>
                         </div>
-                        <h3 class="mb-5 text-white"><a href="vendor-details-1.html" class="text-white">{{vendor.title}}</a></h3>
+                        <h3 class="mb-5 text-white"><a href="{% url 'core:vendor-detail' vendor.vid %}" class="text-white">{{vendor.vendor_title}}</a></h3>
                         <div class="product-rate-cover mb-15">
                             <div class="product-rate d-inline-block">
-                                <div class="product-rating" style="width: 90%"></div>
+                                <div class="product-rating" style="width: {{vendor.get_rating_percentage}}%"></div>
                             </div>
-                            <span class="font-small ml-5 text-muted"> (4.0)</span>
+                            <span class="font-small ml-5 text-muted"> ({{vendor.get_avg_rating|floatformat:1}})</span>
                         </div>
                         <div class="row">
                             <div class="col-lg-4">
@@ -37,8 +37,8 @@
                             <div class="col-lg-3">
                                 <div class="vendor-info text-white mb-15">
                                     <ul class="font-sm">
-                                        <li><img class="mr-5" src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>{{vendor.address}}</span></li>
-                                        <li><img class="mr-5" src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Call Us:</strong><span>{{vendor.contact}}</span></li>
+                                        <li><img class="mr-5" src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>{{vendor.vendor_address}}</span></li>
+                                        <li><img class="mr-5" src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Call Us:</strong><span>{{vendor.vendor_mobile}}</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -78,16 +78,31 @@
                                         <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
-                                        <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                        <span>
+                                            {% if current_sort == "featured" %}
+                                                Featured
+                                            {% elif current_sort == "price_low_to_high" %}
+                                                Price: Low to High
+                                            {% elif current_sort == "price_high_to_low" %}
+                                                Price: High to Low
+                                            {% elif current_sort == "release_date" %}
+                                                Release Date
+                                            {% elif current_sort == "avg_rating" %}
+                                                Avg. Rating
+                                            {% else %}
+                                                Featured
+                                            {% endif %}
+                                            <i class="fi-rs-angle-small-down"></i>
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="sort-by-dropdown">
                                     <ul>
-                                        <li><a class="active" href="#">Featured</a></li>
-                                        <li><a href="#">Price: Low to High</a></li>
-                                        <li><a href="#">Price: High to Low</a></li>
-                                        <li><a href="#">Release Date</a></li>
-                                        <li><a href="#">Avg. Rating</a></li>
+                                        <li><a class="{% if current_sort == 'featured' %}active{% endif %}" href="?sort=featured">Featured</a></li>
+                                        <li><a class="{% if current_sort == 'price_low_to_high' %}active{% endif %}" href="?sort=price_low_to_high">Price: Low to High</a></li>
+                                        <li><a class="{% if current_sort == 'price_high_to_low' %}active{% endif %}" href="?sort=price_high_to_low">Price: High to Low</a></li>
+                                        <li><a class="{% if current_sort == 'release_date' %}active{% endif %}" href="?sort=release_date">Release Date</a></li>
+                                        <li><a class="{% if current_sort == 'avg_rating' %}active{% endif %}" href="?sort=avg_rating">Avg. Rating</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -99,7 +114,7 @@
                             <div class="product-img-action-wrap">
                                 <div class="product-img product-img-zoom">
                                     <div class="product-img-inner">
-                                        <a href="shop-product-right.html">
+                                        <a href="{% url 'core:product-detail' p.pid %}">
                                             <img class="default-img" src="{{p.image.url}}" alt="" />
                                             <img class="hover-img" src="{{p.image.url}}" alt="" />
                                         </a>
@@ -116,40 +131,34 @@
                             </div>
                             <div class="product-content-wrap">
                                 <div class="product-category">
-                                    <a href="shop-grid-right.html">{{p.category.title}}</a>
+                                    <a href="{% url 'core:category-product-list' p.category.cid %}">{{p.category.title}}</a>
                                 </div>
-                                <h2><a href="shop-product-right.html">{{p.title|truncatechars:50}}</a></h2>
-                                <div class="product-rate-cover">
-                                    <!-- <div class="product-rate d-inline-block">
-                                        <div class="product-rating" style="width: 90%"></div>
-                                    </div> -->
-                                    <!-- <span class="font-small ml-5 text-muted"> (4.0)</span> -->
-                                    <!-- <span class="ml-30">500g</span> -->
-                                </div>
+                                <h2><a href="{% url 'core:product-detail' p.pid %}">{{p.title|truncatechars:50}}</a></h2>
                                 <p class="mt-15 mb-15">{{ p.description }}</p>
                                 <div class="product-price">
-                                    <span>{{p.price}}</span>
-                                    <span class="old-price">{{p.old_price}}</span>
+                                    <span>$</span><span class="current-product-price-{{p.id}}">{{p.price}}</span>
+                                    <span class="old-price">${{p.old_price}}</span>
                                 </div>
                                 <div class="mt-30 d-flex align-items-center">
-                                    <a aria-label="Buy now" class="btn" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add to Cart</a>
-                                    <a href="#" class="add-wishlish ml-30 text-body font-sm font-heading font-weight-bold"><i class="fi-rs-shuffle mr-5"></i>Add Compare</a>
+                                    <input type="hidden" value="1" class="product-quantity-{{p.id}}">
+                                    <input type="hidden" class="product-pid-{{p.id}}" value="{{p.pid}}">
+                                    <input type="hidden" class="product-image-{{p.id}}" value="{{p.image.url}}">
+                                    <input type="hidden" class="product-id-{{p.id}}" value="{{p.id}}">
+                                    <input type="hidden" class="product-title-{{p.id}}" value="{{p.title}}">
+                                    <button class="btn add-to-cart-btn" data-index="{{p.id}}"><i class="fi-rs-shopping-cart mr-5"></i>Add to Cart</button>
                                 </div>
                             </div>
                         </div>
                         {% endfor %}
-                    <!--product grid-->
+                    </div>
                 </div>
                 <div class="col-lg-1-5 primary-sidebar sticky-sidebar">
-                    <div class="banner-img mb-30">
-                        <img src="{% static 'assets/imgs/banner/banner-10.jpg' %}" alt="" />
-                    </div>
                     <div class="sidebar-widget widget-category-2 mb-30">
                         <h5 class="section-title style-1 mb-30">Category</h5>
                         <ul>
                             {% for c in categories %}
                             <li>
-                                <a href="shop-grid-right.html"> <img src="{{c.image.url}}" alt="" />{{c.title}}</a><span class="{{c.category.all.count}}"></span>
+                                <a href="{% url 'core:category-product-list' c.cid %}"> <img src="{{c.image.url}}" alt="" />{{c.title}}</a><span class="count">{{c.category.count}}</span>
                             </li>
                             {% endfor %}
                         </ul>
@@ -158,5 +167,4 @@
             </div>
         </div>
     </main>
-</html>
 {% endblock %}

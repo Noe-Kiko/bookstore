@@ -39,7 +39,21 @@ def index(request):
     return render(request, 'core/index.html', context)  
 
 def product_list_view(request):
+    sort_by = request.GET.get("sort", "featured")  # Default sort is featured
+    
     products = Product.objects.filter(product_status="published")
+    
+    # Apply sorting based on the sort parameter
+    if sort_by == "price_low_to_high":
+        products = products.order_by("price")
+    elif sort_by == "price_high_to_low":
+        products = products.order_by("-price")
+    elif sort_by == "release_date":
+        products = products.order_by("-date")
+    elif sort_by == "avg_rating":
+        products = products.order_by("-rating")
+    else:  # Default to featured (which we'll implement as newest)
+        products = products.order_by("-date")
     
     # Get min and max prices for the price filter
     min_max_price = Product.objects.filter(product_status="published").aggregate(
@@ -58,25 +72,53 @@ def product_list_view(request):
         "min_max_price": min_max_price,
         "categories": Category.objects.all(),
         "vendors": Vendor.objects.all(),
+        "current_sort": sort_by,
     }
     return render(request, 'core/product-list.html', context)
 
 
 def category_list_view(request):
+    sort_by = request.GET.get("sort", "featured")  # Default sort is featured
+    
     categories = Category.objects.all()
+    
+    # Apply sorting based on the sort parameter
+    if sort_by == "name_a_z":
+        categories = categories.order_by("title")
+    elif sort_by == "name_z_a":
+        categories = categories.order_by("-title")
+    # Default to featured (you can define what "featured" means for categories)
+    else:
+        categories = categories.order_by("id")
 
     context = {
-        "categories":categories
+        "categories": categories,
+        "current_sort": sort_by,
     }
     return render(request, 'core/category-list.html', context)  
 
 def category_product_list_view(request, cid):
     category = Category.objects.get(cid=cid)
+    sort_by = request.GET.get("sort", "featured")  # Default sort is featured
+    
     products = Product.objects.filter(product_status="published", category=category)
+    
+    # Apply sorting based on the sort parameter
+    if sort_by == "price_low_to_high":
+        products = products.order_by("price")
+    elif sort_by == "price_high_to_low":
+        products = products.order_by("-price")
+    elif sort_by == "release_date":
+        products = products.order_by("-date")
+    elif sort_by == "avg_rating":
+        products = products.order_by("-rating")
+    else:  # Default to featured (which we'll implement as newest)
+        products = products.order_by("-date")
 
     context = {
-        "category":category,
-        "products":products,
+        "category": category,
+        "products": products,
+        "current_sort": sort_by,
     }
     return render(request, 'core/category-product-list.html', context)  
 
@@ -105,10 +147,14 @@ def vendor_detail_view(request, vid):
     else:  # Default to featured (which we'll implement as newest)
         products = products.order_by("-date")
     
+    # Get categories for sidebar
+    categories = Category.objects.all()
+    
     context = {
         "vendor": vendor,
         "products": products,
         "current_sort": sort_by,
+        "categories": categories,
     }
     return render(request, "core/vendor-detail.html", context)
 
@@ -235,6 +281,10 @@ def filter_product(request):
     return JsonResponse({"data":data})
 
 def clean_price(price_str):
+    # Check for empty string or None
+    if not price_str:
+        return '0'  # Return '0' for empty strings
+    
     # Remove dollar sign and fix multiple decimal points
     price_str = price_str.replace('$', '')
     if price_str.count('.') > 1:
@@ -275,8 +325,12 @@ def cart_view(request):
     cart_total_amount = 0
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session['cart_data_obj'].items():
-            price = clean_price(item['price'])
-            cart_total_amount += int(item['qty']) * float(price)
+            try:
+                price = clean_price(item['price'])
+                cart_total_amount += int(item['qty']) * float(price)
+            except (ValueError, TypeError):
+                # Handle conversion error by using 0 as price
+                pass
         return render(request, "core/cart.html", {"cart_data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount':cart_total_amount})
     else:
         messages.warning(request, "Your cart is empty")
@@ -293,8 +347,12 @@ def delete_item_from_cart(request):
     cart_total_amount = 0
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session['cart_data_obj'].items():
-            price = clean_price(item['price'])
-            cart_total_amount += int(item['qty']) * float(price)
+            try:
+                price = clean_price(item['price'])
+                cart_total_amount += int(item['qty']) * float(price)
+            except (ValueError, TypeError):
+                # Handle conversion error
+                pass
 
     context = render_to_string("core/async/cart-list.html", {"cart_data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount':cart_total_amount})
     return JsonResponse({
@@ -318,10 +376,14 @@ def update_cart(request):
     item_total = 0
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session["cart_data_obj"].items():
-            price = float(clean_price(item['price']))
-            cart_total_amount += int(item['qty']) * price
-            if p_id == product_id:
-                item_total = int(item['qty']) * price
+            try:
+                price = float(clean_price(item['price']))
+                cart_total_amount += int(item['qty']) * price
+                if p_id == product_id:
+                    item_total = int(item['qty']) * price
+            except (ValueError, TypeError):
+                # Handle conversion error
+                pass
     
     return JsonResponse({
         "status": "success",
@@ -371,7 +433,12 @@ def save_checkout(request):
 
             # Getting total amount for Paypal Amount
             for p_id, item in request.session['cart_data_obj'].items():
-                total_amount += int(item['qty']) * float(item['price'])
+                try:
+                    price = clean_price(item['price'])
+                    total_amount += int(item['qty']) * float(price)
+                except (ValueError, TypeError):
+                    # Handle conversion error
+                    pass
 
             full_name = request.session['full_name']
             email = request.session['email']
@@ -406,17 +473,22 @@ def save_checkout(request):
 
             # Getting total amount for The Cart
             for p_id, item in request.session['cart_data_obj'].items():
-                cart_total_amount += int(item['qty']) * float(item['price'])
-
-                cartOrderItems = CartOrderItems.objects.create(
-                    order=order,
-                    invoice_no="INVOICE_NO-" + str(order.id), # INVOICE_NO-5,
-                    item=item['title'],
-                    image=item['image'],
-                    qty=item['qty'],
-                    price=item['price'],
-                    total=float(item['qty']) * float(item['price'])
-                )
+                try:
+                    item_price = clean_price(item['price'])
+                    cart_total_amount += int(item['qty']) * float(item_price)
+                    
+                    cartOrderItems = CartOrderItems.objects.create(
+                        order=order,
+                        invoice_no="INVOICE_NO-" + str(order.id), # INVOICE_NO-5,
+                        item=item['title'],
+                        image=item['image'],
+                        qty=item['qty'],
+                        price=item['price'],
+                        total=float(item['qty']) * float(item_price)
+                    )
+                except (ValueError, TypeError):
+                    # Handle conversion error
+                    pass
         return redirect("core:checkout", order.oid)
     return redirect("core:checkout", order.oid)
 

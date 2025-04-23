@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from core.models import CartOrder, Product, Category, CartOrderItems, productReview
+from core.models import CartOrder, Product, Category, CartOrderItems, productReview, Vendor
 from userauths.models import Profile
 from django.db.models import Sum
 from django.contrib import messages
@@ -52,12 +52,12 @@ def vendorDashboard(request):
 
 @adminRequired
 def vendorsProducts(request):
-    allProducts = Category.objects.all().order_by("-id")
+    all_products = Product.objects.all().order_by("-id")
     allCategories = Category.objects.all()
 
     context = {
-        "allProducts":allProducts,
-        "allCategories":allCategories,
+        "all_products": all_products,
+        "allCategories": allCategories,
     }
 
     return render(request, "vendoradmin/products.html", context)
@@ -69,11 +69,20 @@ def addProducts(request):
         if form.is_valid():
             new_form = form.save(commit=False)
             new_form.user = request.user
+            
+            # Set vendor if available
+            try:
+                vendor = Vendor.objects.get(user=request.user)
+                new_form.vendor = vendor
+            except Vendor.DoesNotExist:
+                pass
+                
             new_form.save()
 
             # Many to many field below
             form.save_m2m()
-            return redirect("vendoradmin:dashboard")
+            messages.success(request, "Product added successfully!")
+            return redirect("vendoradmin:products")
     else:
         form = AddProductForm()
 
@@ -92,20 +101,36 @@ def editProduct(request, pid):
         if form.is_valid():
             new_form = form.save(commit=False)
             new_form.user = request.user
+            
+            # Toggle the product status
+            if product.product_status == "published":
+                new_form.product_status = "draft"
+                messages.success(request, "Product unpublished and saved.")
+            else:
+                new_form.product_status = "published"
+                messages.success(request, "Product published successfully!")
+            
+            # Set vendor if available
+            try:
+                vendor = Vendor.objects.get(user=request.user)
+                new_form.vendor = vendor
+            except Vendor.DoesNotExist:
+                pass
+                
             new_form.save()
 
             # Many to many field below
             form.save_m2m()
-            return redirect("vendoradmin:edit_product", product.pid)
-        else:
-            form = AddProductForm(instance=product)
+            return redirect("vendoradmin:products")
+    else:
+        form = AddProductForm(instance=product)
 
-        context = {
-            "form":form,
-            "product":product,
-        }
+    context = {
+        "form": form,
+        "product": product,
+    }
 
-        return render(request, "venoradmin/edit-product.html", context)
+    return render(request, "vendoradmin/edit-product.html", context)
     
 
 @adminRequired
@@ -124,15 +149,15 @@ def orders(request):
     return render(request,"vendoradmin/orders.html", context)
 
 @adminRequired
-def orderDetail(request,pid):
-    orders = CartOrder.objects.all()
-    orderItems = CartOrderItems.objects.filter(orders=orders)
+def orderDetail(request, id):
+    order = CartOrder.objects.get(id=id)
+    order_items = CartOrderItems.objects.filter(order=order)
     context = {
-        "orders":orders,
-        "orderItems":orderItems,
+        "order": order,
+        "order_items": order_items,
     }
 
-    return render(request,"vendoradmin/order_detailhtml", context)
+    return render(request, "vendoradmin/order-detail.html", context)
 
 
 @csrf_exempt
@@ -171,32 +196,74 @@ def reviews(request):
 
 @adminRequired
 def settings(request):
-    # Go in userauths.models Profile table
-    profile = Profile.objects.get(user = request.user)
+    # Get user profile
+    profile = Profile.objects.get(user=request.user)
+
+    # Try to get vendor associated with this user
+    try:
+        vendor = Vendor.objects.get(user=request.user)
+    except Vendor.DoesNotExist:
+        vendor = None
 
     if request.method == "POST":
-        image = request.FILES.get("image")
-        full_name = request.POST.get("full_name")
-        phone = request.POST.get("phone")
-        bio = request.POST.get("bio")
-        address = request.POST.get("address")
-        country = request.POST.get("country")
-
-        if image != None:
-            profile.image = image
+        form_type = request.POST.get("form_type")
         
-        profile.full_name = full_name
-        profile.phone = phone
-        profile.bio = bio
-        profile.address = address
-        profile.country = country
+        # Handle profile form submission
+        if form_type == "profile":
+            image = request.FILES.get("image")
+            full_name = request.POST.get("full_name")
+            phone = request.POST.get("phone")
+            bio = request.POST.get("bio")
+            address = request.POST.get("address")
+            country = request.POST.get("country")
 
-        profile.save()
-        messages.success(request, "Profile updated successfully!")
+            if image:
+                profile.image = image
+            
+            profile.full_name = full_name
+            profile.phone = phone
+            profile.bio = bio
+            profile.address = address
+            profile.country = country
+
+            profile.save()
+            messages.success(request, "Profile updated successfully!")
+            
+        # Handle vendor form submission
+        elif form_type == "vendor" and vendor:
+            vendor_title = request.POST.get("vendor_title")
+            description = request.POST.get("description")
+            vendor_address = request.POST.get("vendor_address")
+            vendor_mobile = request.POST.get("vendor_mobile")
+            vendor_profile_image = request.FILES.get("vendor_profile_image")
+            vendor_banner = request.FILES.get("vendor_banner")
+
+            if vendor_title:
+                vendor.vendor_title = vendor_title
+            
+            if description:
+                vendor.description = description
+                
+            if vendor_address:
+                vendor.vendor_address = vendor_address
+                
+            if vendor_mobile:
+                vendor.vendor_mobile = vendor_mobile
+            
+            if vendor_profile_image:
+                vendor.vendor_profile_image = vendor_profile_image
+                
+            if vendor_banner:
+                vendor.vendor_banner = vendor_banner
+            
+            vendor.save()
+            messages.success(request, "Vendor information updated successfully!")
+        
         return redirect("vendoradmin:settings")
 
     context = {
-        "profile":profile
+        "profile": profile,
+        "vendor": vendor
     }
 
     return render(request, "vendoradmin/settings.html", context)

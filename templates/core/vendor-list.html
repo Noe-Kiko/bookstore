@@ -6,7 +6,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <a href="{% url 'core:index' %}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     <span></span> Vendors List
                 </div>
             </div>
@@ -47,11 +47,11 @@
                             <div class="vendor-img-action-wrap">
                                 <div class="vendor-img">
                                     <a href="{% url 'core:vendor-detail' v.vid%}">
-                                        <img class="default-img" src="{{v.image.url}}" alt="" />
+                                        <img class="default-img" src="{{v.vendor_profile_image.url}}" alt="" />
                                     </a>
                                 </div>
                                 <div class="mt-10">
-                                    <span class="font-small total-product">{{v.product.all.count}} Products</span>
+                                    <span class="font-small total-product">{{v.products.all.count}} Products</span>
                                 </div>
                             </div>
                             <div class="vendor-content-wrap">
@@ -59,17 +59,17 @@
                                     <div class="product-category">
                                         <span class="text-muted">Since {{v.date|date:"Y"}}</span>
                                     </div>
-                                    <h4 class="mb-5"><a href="{% url 'core:vendor-detail' v.vid%}">{{v.title}}</a></h4>
+                                    <h4 class="mb-5"><a href="{% url 'core:vendor-detail' v.vid%}">{{v.vendor_title}}</a></h4>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">
-                                            <div class="product-rating" style="width: 90%"></div>
+                                            <div class="product-rating" style="width: {{v.get_rating_percentage}}%"></div>
                                         </div>
-                                        <span class="font-small ml-5 text-muted"> (4.0)</span>
+                                        <span class="font-small ml-5 text-muted"> ({{v.get_avg_rating|floatformat:1}})</span>
                                     </div>
                                     <div class="vendor-info d-flex justify-content-between align-items-end mt-30">
                                         <ul class="contact-infor text-muted">
-                                            <li><img src="assets/imgs/theme/icons/icon-location.svg" alt="" /><strong>Address: </strong> <span>{{v.address}}</span></li>
-                                            <li><img src="assets/imgs/theme/icons/icon-contact.svg" alt="" /><strong>Call Us:</strong><span>{{v.contact}}</span></li>
+                                            <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>{{v.vendor_address}}</span></li>
+                                            <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Call Us:</strong><span>{{v.vendor_mobile}}</span></li>
                                         </ul>
                                         <a href="{% url 'core:vendor-detail' v.vid%}" class="btn btn-xs">Visit Store <i class="fi-rs-arrow-small-right"></i></a>
                                     </div>
@@ -78,6 +78,7 @@
                         </div>
                     </div>
                     {% endfor %}
+                </div>
             </div>
         </div>
     </main>

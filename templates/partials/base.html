@@ -71,7 +71,6 @@
                                     <option>All Categories</option>
                                     <option>Romance</option>
                                     <option>Drama</option>
-                                    <option>Romance</option>
                                     <option>Science</option>
                                     <option>Computers</option>
                                     <option>Philosophy</option>
@@ -141,9 +140,20 @@
                                 <div class="d-flex categori-dropdown-inner">
                                     <ul>
                                         {% for c in categories %}
+                                        {% if forloop.counter0|divisibleby:2 %}
                                         <li>
                                             <a href="{% url 'core:category-product-list' c.cid%}"> <img src="{{ c.image.url }}" alt="" />{{c.title}}</a>
                                         </li>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                    <ul class="end">
+                                        {% for c in categories %}
+                                        {% if not forloop.counter0|divisibleby:2 %}
+                                        <li>
+                                            <a href="{% url 'core:category-product-list' c.cid%}"> <img src="{{ c.image.url }}" alt="" />{{c.title}}</a>
+                                        </li>
+                                        {% endif %}
                                         {% endfor %}
                                     </ul>
                                 </div>
@@ -181,6 +191,10 @@
                                     </li>
                                     <li>
                                         <a href="{% url 'core:purchasing-guide' %}">Purchasing Guide</a>
+                                    </li>
+                                    <!--    ABOUT PAGE     -->
+                                    <li class="menu-item-has-children">
+                                        <a href="{% url 'core:about-me' %}">About Us</a>
                                     </li>
                                     <!--    CONTACT TAB   -->
                                     <li>
@@ -292,7 +306,6 @@
                             <li class="menu-item-has-children">
                                 <a href="#">Registration</a>
                                 <ul class="dropdown">
-                                    <li><a href="{% url 'core:about-me' %}">About Us</a></li>
                                     <li><a href="{% url 'core:dashboard' %}">My Account</a></li>
                                     <li><a href="{% url 'userauths:sign-in' %}">Login</a></li>
                                     <li><a href="{% url 'userauths:sign-up' %}">Register</a></li>

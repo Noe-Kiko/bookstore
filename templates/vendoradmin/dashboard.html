@@ -8,7 +8,7 @@
             <p>Vendor Analytics</p>
         </div>
         <div>
-            <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create Product</a>
+            <a href="{% url 'vendoradmin:add_product' %}" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create Product</a>
         </div>
     </div>
     <div class="row">
@@ -60,29 +60,6 @@
     <div class="card mb-4">
         <header class="card-header">
             <h4 class="card-title">Recent Orders</h4>
-            <div class="row align-items-center">
-                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                    <div class="custom_select">
-                        <select class="form-select select-nice">
-                            <option selected>Oldest to Newest</option>
-                            <option selected>Newest to Oldest</option>
-                            <option selected>Highlest Price</option>
-                            <option selected>Lowest Price</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2 col-6">
-                    <div class="custom_select">
-                        <select class="form-select select-nice">
-                            <option selected>Status</option>
-                            <option>All</option>
-                            <option>Paid</option>
-                            <option>Pending</option>
-                            <option>Cancelled</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
         </header>
         <div class="card-body">
             <div class="table-responsive">
@@ -97,7 +74,9 @@
                                     </div>
                                 </th>
                                 <th class="align-middle" scope="col">Order ID</th>
-                                <th class="align-middle" scope="col">Billing Name</th>
+                                <th class="align-middle" scope="col">Name</th>
+                                <th class="align-middle" scope="col">Email</th>
+                                <th class="align-middle" scope="col">Phone</th>
                                 <th class="align-middle" scope="col">Date</th>
                                 <th class="align-middle" scope="col">Total</th>
                                 <th class="align-middle" scope="col">Payment Status</th>
@@ -113,12 +92,12 @@
                                         <label class="form-check-label" for="transactionCheck02"></label>
                                     </div>
                                 </td>
-                                <td><a href="#" class="fw-bold">#43543534</a></td>
+                                <td><a href="#" class="fw-bold">#{{l.oid}}</a></td>
                                 <td>{{l.full_name}}</td>
                                 <td>{{l.email}}</td>
                                 <td>{{l.phone}}</td>
                                 <td>{{l.order_date}}</td>
-                                <td>${{order.price}}</td>
+                                <td>${{l.price|floatformat:2}}</td>
                                 <td>
                                     {% if l.paid_status == True %}
                                     <span class="badge badge-pill badge-soft-success">Paid</span>
@@ -127,7 +106,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-xs"> View details</a>
+                                    <a href="{% url 'vendoradmin:order_detail' l.id %}" class="btn btn-xs"> View details</a>
                                 </td>
                             </tr>
                             {% endfor %}

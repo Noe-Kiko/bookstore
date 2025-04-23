@@ -43,14 +43,13 @@
                                     </div>
                                     <div class="col-md-6 col-sm-12 col-xs-12">
                                         <div class="detail-info pr-30 pl-30">
-                                            <span class="stock-status out-stock"> -{{p.get_percentage|floatformat:0}}</span>
+                                            <span class="stock-status out-stock">{{p.get_percentage}}% OFF</span>
                                             <h2 class="title-detail">{{p.title}}</h2>
                                             <div class="clearfix product-price-cover">
                                                 <div class="product-price primary-color float-left">
                                                     <span class="current-price text-brand">$</span><span class="current-price text-brand current-price current-product-price-{{p.id}}" id="current-product-price">{{p.price}}</span>
                                                     <span>
-                                                        <span class="save-price font-md color3 ml-15">-{{p.get_percentage|floatformat:0}}</span>
-                                                    <span class="old-price font-md ml-15">{{p.old_price}}</span>
+                                                    <span class="old-price font-md ml-15">${{p.old_price}}</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -72,12 +71,12 @@
                                             </div>
                                             <div class="font-xs">
                                                 <ul class="mr-50 float-start">
-                                                    <li class="mb-5">Type: <span class="text-brand">{{p.type}}</span></li>
-                                                    <li class="mb-5">Published Date:<span class="text-brand"> {{p.publishDate}}</span></li>
+                                                    <li class="mb-5">Condition: <span class="text-brand">{{p.condition}}</span></li>
+                                                    <li class="mb-5">Published Date:<span class="text-brand"> {% if p.publishDate and p.publishDate != "todays date" %}{{p.publishDate}}{% else %}Not specified{% endif %}</span></li>
                                                    <!--  <li>LIFE: <span class="text-brand">70 days</span></li> -->
                                                 </ul>
                                                 <ul class="float-start">
-                                                    <li>Stock:<span class="in-stock text-brand ml-5">{{p.stock_count}} In Stock</span></li>
+                                                    <li>Stock:<span class="in-stock text-brand ml-5">{{p.stock_count}} book{{p.stock_count|pluralize}}</span></li>
                                                 </span></li>
                                                 </ul>
                                             </div>
@@ -109,10 +108,18 @@
                                             </div>
                                             <div class="tab-pane fade" id="Vendor-info">
                                                 <div class="vendor-logo d-flex mb-30">
-                                                    <img src="{{p.vendor.image.url}}" alt="" />
+                                                    {% if p.vendor %}
+                                                    <img src="{{p.vendor.vendor_profile_image.url}}" alt="" />
+                                                    {% else %}
+                                                    <img src="{% static 'assets/imgs/vendor/vendor-1.png' %}" alt="Default vendor image" />
+                                                    {% endif %}
                                                     <div class="vendor-name ml-15">
                                                         <h6>
-                                                            <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{p.vendor.title}}</a>
+                                                            {% if p.vendor %}
+                                                            <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{p.vendor.vendor_title}}</a>
+                                                            {% else %}
+                                                            <span>No Vendor Information</span>
+                                                            {% endif %}
                                                         </h6>
                                                         <div class="product-rate-cover text-end">
                                                             <div class="product-rate d-inline-block">
@@ -123,8 +130,13 @@
                                                     </div>
                                                 </div>
                                                 <ul class="contact-infor mb-50">
-                                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>{{p.vendor.address}}</span></li>
-                                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Contact Seller:</strong><span>{{p.vendor.contact}}</span></li>
+                                                    {% if p.vendor %}
+                                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>{{p.vendor.vendor_address}}</span></li>
+                                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Contact Seller:</strong><span>{{p.vendor.vendor_mobile}}</span></li>
+                                                    {% else %}
+                                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>No address information</span></li>
+                                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Contact Seller:</strong><span>No contact information</span></li>
+                                                    {% endif %}
                                                 </ul>
                                             </div>
                                             <div class="tab-pane fade" id="Reviews">
@@ -144,7 +156,7 @@
                                                                         <div class="desc">
                                                                             <div class="d-flex justify-content-between mb-10">
                                                                                 <div class="d-flex align-items-center">
-                                                                                    <span class="font-xs text-muted">{{r.date|date:"d M, Y"}} </span>
+                                                                                    <span class="font-xs text-muted">{{r.date|date:"M d, Y"}} </span>
                                                                                 </div>
 
                                                                                 {% for s in r.rating|ljust:r.rating %}
@@ -161,7 +173,7 @@
                                                     </div>
                                                 </div>
                                                 <!--comment form-->
-                                                {% if request.user.is_authenitcated %}
+                                                {% if request.user.is_authenticated %}
                                                 {% if make_review %}
                                                     <div class="comment-form">
                                                         <h4 class="mb-15 add-review">Add a review</h4>
@@ -219,7 +231,7 @@
                                                             <a href="{% url 'core:product-detail' p.pid %}" class="action-btn"><i class="fi-rs-eye"></i></a>
                                                         </div>
                                                         <div class="product-badges product-badges-position product-badges-mrg">
-                                                            <span class="hot">-{{p.get_precentage|floatformat:0}}%</span>
+                                                            <span class="hot">{{p.get_percentage}}% OFF</span>
                                                         </div>
                                                     </div>
                                                     <div class="product-content-wrap">
@@ -286,27 +298,35 @@
                                 </ul>
                                 <h5 class="section-title style-3 mb-20">Return & Warranty</h5>
                                 <ul>
+                                    {% if p.vendor %}
                                     <li>
                                         <i class="fi fi-rs-shield-check mr-10 text-brand"></i>
-                                        <span> {{p.vendor.authentic_rating}}% Authentic </span>
+                                        <span> {{p.vendor.authentic_rating|default:"N/A"}}% Authentic </span>
                                     </li>
                                     <li>
                                         <i class="fi fi-rs-time-forward-ten mr-10 text-brand"></i>
-                                        <span> {{p.vendor.days_return}} Days Return </span>
+                                        <span> {{p.vendor.days_return|default:"N/A"}} Days Return </span>
                                     </li>
                                     <li>
                                         <i class="fi fi-rs-diploma mr-10 text-brand"></i>
-                                        <span> {{p.vendor.warranty_period}} Months Warranty </span>
+                                        <span> {{p.vendor.warranty_period|default:"N/A"}} Months Warranty </span>
                                     </li>
+                                    {% else %}
+                                    <li>
+                                        <i class="fi fi-rs-shield-check mr-10 text-brand"></i>
+                                        <span>No vendor warranty information available</span>
+                                    </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                             <div class="sidebar-widget widget-vendor mb-30 bg-grey-9 box-shadow-none">
                                 <h5 class="section-title style-3 mb-20">Vendor</h5>
+                                {% if p.vendor %}
                                 <div class="vendor-logo d-flex mb-30">
-                                    <img src="{{p.vendor.image.url}}" alt="" />
+                                    <img src="{{p.vendor.vendor_profile_image.url}}" alt="" />
                                     <div class="vendor-name ml-15">
                                         <h6>
-                                            <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{p.vendor.title}}</a>
+                                            <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{p.vendor.vendor_title}}</a>
                                         </h6>
                                         <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
@@ -317,48 +337,17 @@
                                     </div>
                                 </div>
                                 <ul class="contact-infor">
-                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>{{p.vendor.address}}</span></li>
-                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Contact Seller:</strong><span>{{p.vendor.contact}}</span></li>
+                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-location.svg' %}" alt="" /><strong>Address: </strong> <span>{{p.vendor.vendor_address}}</span></li>
+                                    <li><img src="{% static 'assets/imgs/theme/icons/icon-contact.svg' %}" alt="" /><strong>Contact Seller:</strong><span>{{p.vendor.vendor_mobile}}</span></li>
                                     <li class="hr"><span></span></li>
                                 </ul>
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <p class="text-brand font-xs">Rating</p>
-                                        <h4 class="mb-0">92%</h4>
-                                    </div>
-                                    <div>
-                                        <p class="text-brand font-xs">Ship on time</p>
-                                        <h4 class="mb-0">{{p.vendor.shipping_on_time}}%</h4>
-                                    </div>
-                                    <div>
-                                        <p class="text-brand font-xs">Chat response</p>
-                                        <h4 class="mb-0">{{p.vendor.chat_resp_time}}%</h4>
-                                    </div>
-                                </div>
+                                {% else %}
+                                <p>No vendor information available for this product.</p>
+                                {% endif %}
                                 <ul>
                                     <li class="hr"><span></span></li>
                                 </ul>
-                                <p>Become a Vendor? <a href="page-register.html"> Register now</a></p>
-                            </div>
-                            <div class="sidebar-widget widget-category-2 mb-30">
-                                <h5 class="section-title style-1 mb-30">Category</h5>
-                                <ul>
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-1.svg' %}" alt="" />Milks & Dairies</a><span class="count">30</span>
-                                    </li>
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-2.svg' %}" alt="" />Clothing</a><span class="count">35</span>
-                                    </li>
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-3.svg' %}" alt="" />Pet Foods </a><span class="count">42</span>
-                                    </li>
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-4.svg' %}" alt="" />Baking material</a><span class="count">68</span>
-                                    </li>
-                                    <li>
-                                        <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-5.svg' %}" alt="" />Fresh Fruit</a><span class="count">87</span>
-                                    </li>
-                                </ul>
+                                <p>Become a Vendor? <a href="{% url 'core:become-vendor' %}"> Register now</a></p>
                             </div>
                         </div>
                     </div>

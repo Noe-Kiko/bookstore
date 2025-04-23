@@ -6,6 +6,7 @@ from pyexpat import model
 from userauths.models import User
 from taggit.managers import TaggableManager
 from django_ckeditor_5.fields import CKEditor5Field
+from django.db.models import Avg
 
 STATUS_CHOICE = {
 
@@ -85,6 +86,22 @@ class Vendor(models.Model):
     def __str__(self):
         return self.vendor_title
     
+    def get_avg_rating(self):
+        # Get all products from this vendor that have reviews
+        product_ratings = productReview.objects.filter(product__vendor=self).aggregate(avg_rating=Avg('rating'))
+        if product_ratings['avg_rating']:
+            return product_ratings['avg_rating']
+        return 0
+    
+    def get_rating_percentage(self):
+        avg_rating = self.get_avg_rating()
+        return (avg_rating / 5) * 100
+    
+    def get_review_count(self):
+        # Count all reviews for products from this vendor
+        review_count = productReview.objects.filter(product__vendor=self).count()
+        return review_count
+
 ########################
 class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=30, alphabet="abcdefg12345")
@@ -120,8 +137,11 @@ class Product(models.Model):
     def __str__(self):
             return self.title
     
-    def getPercentage(self):
-         new_price = (self.price/ self.old_price) * 100
+    def get_percentage(self):
+        if float(self.old_price) > 0:
+            discount = 100 - (float(self.price) / float(self.old_price) * 100)
+            return int(discount)
+        return 0
 
 ########################
 # Gives the ability to add MULTIPLE images to a single product

@@ -129,21 +129,61 @@ if (typeof jQuery === 'undefined') {
             let quantity = $(".product-quantity-" + product_id).val() || 1;
             let product_title = $(".product-title-" + product_id).val();
             
-            // Check if we're on the wishlist page
+            // Get product price - with multiple fallback options
             let product_price;
-            if ($("#wishlist-list").length) {
-                product_price = $(".current-product-price-" + product_id).text().trim();
-            } else {
-                // Find price element in the DOM
-                product_price = $(".current-product-price").text().trim();
+            
+            // Try multiple ways to get the product price in order of specificity
+            // First check for the ID which is unique
+            if ($("#current-product-price").length > 0) {
+                product_price = $("#current-product-price").text().trim();
+                console.log("Found price using #current-product-price:", product_price);
             }
+            // Try the class specifically for this product ID 
+            else if ($(".current-product-price-" + product_id).length > 0) {
+                product_price = $(".current-product-price-" + product_id).text().trim();
+                console.log("Found price using class with ID:", product_price);
+            }
+            // Try the generic class
+            else if ($(".current-product-price").length > 0) {
+                product_price = $(".current-product-price").text().trim();
+                console.log("Found price using generic class:", product_price);
+            }
+            // If all else fails, check for any price related element
+            else {
+                product_price = $(".price").text().trim();
+                console.log("Found price using .price class:", product_price);
+            }
+            
+            // If we still don't have a price, set a default to prevent errors (can be fixed later by admin)
+            if (!product_price) {
+                console.error("Could not find price, using default price of 0");
+                product_price = "0";
+            }
+            
+            // Clean the price - remove currency symbol if present
+            product_price = product_price.replace(/[$£€]/g, '').trim();
             
             console.log("Quantity:", quantity);
             console.log("Title:", product_title);
-            console.log("Price:", product_price);
+            console.log("Final Price being used:", product_price);
             
             let product_pid = $(".product-pid-" + product_id).val();
-            let product_image = $(".product-image-" + product_id).val();
+            
+            // Get product image with multiple fallbacks
+            let product_image;
+            
+            if ($(".product-image-" + product_pid).length > 0) {
+                product_image = $(".product-image-" + product_pid).val();
+            } else if ($(".product-image-" + product_id).length > 0) {
+                product_image = $(".product-image-" + product_id).val();
+            } else if ($(".product-image-slider img:first").length > 0) {
+                product_image = $(".product-image-slider img:first").attr("src");
+            } else if ($(".product-img img:first").length > 0) {
+                product_image = $(".product-img img:first").attr("src");
+            } else {
+                // Default placeholder image if nothing else works
+                product_image = "/static/assets/imgs/shop/product-1-1.jpg";
+            }
             
             console.log("PID:", product_pid);
             console.log("Image:", product_image);

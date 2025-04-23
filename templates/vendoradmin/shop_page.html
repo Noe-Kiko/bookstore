@@ -33,7 +33,7 @@
                         <p class="mb-0 text-muted">Total sales:</p>
                         <h5 class="text-success">{{ total_sales.qty|default:"No Sales Yet" }}</h5>
                         <p class="mb-0 text-muted">Revenue:</p>
-                        <h5 class="text-success mb-0">${{revenue.price|default:"0.00"}}</h5>
+                        <h5 class="text-success mb-0">${{revenue.price|floatformat:2|default:"0.00"}}</h5>
                     </article>
                 </div>
                 <!--  col.// -->
