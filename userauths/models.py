@@ -48,7 +48,6 @@ class ContactUs(models.Model):
     phone = models.CharField(max_length=15) 
     subject = models.CharField(max_length=30) 
     message = models.TextField()
-
     class Meta:
         verbose_name = "Contact Us"
         verbose_name_plural = "Contact Us"
@@ -83,7 +82,7 @@ class becomeVendorForm(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        verbose_name_plural = "Vendor Applications (Old)"
+        verbose_name_plural = "Vendor Applications"
         
     def __str__(self):
         return self.business_name    
