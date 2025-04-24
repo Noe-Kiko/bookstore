@@ -30,7 +30,7 @@ env.read_env()
 SECRET_KEY = 'django-insecure-om3!9_3d0*@pc#m1_mtur32j0kqv+1j3-&+%j#*-u_nzta1lj_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = [
     # Azure hosts
@@ -123,10 +123,20 @@ WSGI_APPLICATION = 'bookstore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# Check if running on Azure (environment variable set in Azure App Service)
+RUNNING_ON_AZURE = os.environ.get('WEBSITE_HOSTNAME') is not None
+
+if RUNNING_ON_AZURE:
+    # Azure path
+    DB_PATH = os.path.join('/home/data', 'db.sqlite3')
+else:
+    # Local path
+    DB_PATH = os.path.join(BASE_DIR, 'db.sqlite3')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': DB_PATH,
     }
 }
 
