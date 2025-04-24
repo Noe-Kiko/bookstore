@@ -43,6 +43,12 @@ ALLOWED_HOSTS = [
     '127.0.0.1:8000'
 ]
 
+# CSRF Trusted Origins - needed for form submissions in production
+CSRF_TRUSTED_ORIGINS = [
+    'https://shelf-space-gtgydhdvbkbsg2gt.eastus2-01.azurewebsites.net',
+    'https://shelf-space-gtgydhdvbkbsg2gt.azurewebsites.net',
+]
+
 # This fix allowed the visual glitch to be removed
     # Whenever I clicked on the paypal button on the checkout.html 
     # a white box popup appeared, this allowed it to work correctly.
@@ -77,6 +83,9 @@ INSTALLED_APPS = [
     
     # App to integrate paypal
     'paypal.standard.ipn',
+
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -121,6 +130,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join('/home', 'db.sqlite3'),
     }
 }
 
