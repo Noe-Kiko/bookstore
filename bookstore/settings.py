@@ -235,8 +235,7 @@ PAYPAL_TEST = True
 ############################  STRIPE SETTINGS  ############################
 
 # Below .env stripe_public_key
-STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default="")
 
 # Below .env stripe_secret_key
-
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
