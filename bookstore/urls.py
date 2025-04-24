@@ -32,7 +32,10 @@ urlpatterns = [
 ]
 
 
+# Always serve media files in development
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Static files only needed with DEBUG=True since we're using whitenoise in production
 if settings.DEBUG:
     # All the static files are stored in the roots directory in a folder called static
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

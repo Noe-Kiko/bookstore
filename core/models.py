@@ -44,7 +44,7 @@ class Category(models.Model):
     title = models.CharField(max_length=100, default="Category Item")
     
     # responsible for thumbnail of products
-    image = models.ImageField(upload_to="category.jpg")
+    image = models.ImageField(upload_to="categories", default="category.jpg")
 
     class Meta:
         verbose_name_plural = "Categories"

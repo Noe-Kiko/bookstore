@@ -6,7 +6,7 @@ from django.contrib import messages
 def default(request):
     try:
         categories = Category.objects.all()
-    except DatabaseError:
+    except Exception:
         categories = []
         
     try:

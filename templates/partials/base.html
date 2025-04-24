@@ -139,22 +139,42 @@
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                                 <div class="d-flex categori-dropdown-inner">
                                     <ul>
-                                        {% for c in categories %}
-                                        {% if forloop.counter0|divisibleby:2 %}
-                                        <li>
-                                            <a href="{% url 'core:category-product-list' c.cid%}"> <img src="{{ c.image.url }}" alt="" />{{c.title}}</a>
-                                        </li>
+                                        {% if categories %}
+                                            {% for c in categories %}
+                                                {% if forloop.counter0|divisibleby:2 %}
+                                                <li>
+                                                    <a href="{% url 'core:category-product-list' c.cid%}"> 
+                                                        {% if c.image %}
+                                                            <img src="{{ c.image.url }}" alt="{{ c.title }}" onerror="this.src='{% static 'assets/imgs/theme/favicon.svg' %}'" />
+                                                        {% else %}
+                                                            <img src="{% static 'assets/imgs/theme/favicon.svg' %}" alt="Default" />
+                                                        {% endif %}
+                                                        {{c.title}}
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <li><a href="#">No categories available</a></li>
                                         {% endif %}
-                                        {% endfor %}
                                     </ul>
                                     <ul class="end">
-                                        {% for c in categories %}
-                                        {% if not forloop.counter0|divisibleby:2 %}
-                                        <li>
-                                            <a href="{% url 'core:category-product-list' c.cid%}"> <img src="{{ c.image.url }}" alt="" />{{c.title}}</a>
-                                        </li>
+                                        {% if categories %}
+                                            {% for c in categories %}
+                                                {% if not forloop.counter0|divisibleby:2 %}
+                                                <li>
+                                                    <a href="{% url 'core:category-product-list' c.cid%}"> 
+                                                        {% if c.image %}
+                                                            <img src="{{ c.image.url }}" alt="{{ c.title }}" onerror="this.src='{% static 'assets/imgs/theme/favicon.svg' %}'" />
+                                                        {% else %}
+                                                            <img src="{% static 'assets/imgs/theme/favicon.svg' %}" alt="Default" />
+                                                        {% endif %}
+                                                        {{c.title}}
+                                                    </a>
+                                                </li>
+                                                {% endif %}
+                                            {% endfor %}
                                         {% endif %}
-                                        {% endfor %}
                                     </ul>
                                 </div>
                                 <div class="more_slide_open" style="display: none">
@@ -173,12 +193,15 @@
                                     <li>
                                         <a href="#">Category <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            {% for c in categories %}
-                                            <li><a href="{% url 'core:category-product-list' c.cid %}">{{c.title}}</a></li>
-                                            {% endfor %}
-                                            <hr>
+                                            {% if categories %}
+                                                {% for c in categories %}
+                                                <li><a href="{% url 'core:category-product-list' c.cid %}">{{c.title}}</a></li>
+                                                {% endfor %}
+                                                <hr>
+                                            {% else %}
+                                                <li><a href="#">No categories available</a></li>
+                                            {% endif %}
                                             <li><a href="{% url 'core:category-list' %}">All Categories</a></li>
-
                                         </ul>
                                     </li>
                                     <!--  VENDORS TAB   -->
@@ -430,7 +453,8 @@
         </div>
     </div>
     <!-- Vendor JS-->
-    <script data-cfasync="false" src="{% static '/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script>
+    <!-- CloudFlare script removed since it's not available in this environment -->
+    <!-- <script data-cfasync="false" src="{% static '/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script> -->
     <script src="{% static 'assets/js/vendor/modernizr-3.6.0.min.js' %}"></script>
     <script src="{% static 'assets/js/vendor/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'assets/js/vendor/jquery-migrate-3.3.0.min.js' %}"></script>

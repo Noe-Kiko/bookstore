@@ -32,7 +32,16 @@ SECRET_KEY = 'django-insecure-om3!9_3d0*@pc#m1_mtur32j0kqv+1j3-&+%j#*-u_nzta1lj_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    # Azure hosts
+    'shelf-space-gtgydhdvbkbsg2gt.eastus2-01.azurewebsites.net',
+    'shelf-space-gtgydhdvbkbsg2gt.azurewebsites.net',
+    # Local development hosts
+    '127.0.0.1', 
+    'localhost', 
+    '0.0.0.0', 
+    '127.0.0.1:8000'
+]
 
 # This fix allowed the visual glitch to be removed
     # Whenever I clicked on the paypal button on the checkout.html 
@@ -72,6 +81,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -158,6 +168,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+# Enable WhiteNoise compression and caching for better performance
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 
 # All media files will be sitting here, for example
@@ -239,10 +253,3 @@ STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default="")
 
 # Below .env stripe_secret_key
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
-
-
-ALLOWED_HOSTS = [
-    'shelf-space-gtgydhdvbkbsg2gt.eastus2-01.azurewebsites.net',
-    'shelf-space-gtgydhdvbkbsg2gt.azurewebsites.net',  # Add this too, just in case
-    'localhost',  # Optional for local dev
-]

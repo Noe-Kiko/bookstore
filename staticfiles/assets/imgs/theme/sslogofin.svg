@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+	<rect x="0" y="0" width="200" height="200" rx="25" fill="#2685cd"/>
+	<g fill="white">
+		<rect x="25" y="40" width="40" height="90" stroke="white" fill="none" stroke-width="3"/>
+		<rect x="30" y="45" width="5" height="35" fill="white"/>
+		<rect x="37" y="45" width="5" height="35" fill="white"/>
+		<rect x="44" y="45" width="5" height="35" fill="white"/>
+		<rect x="30" y="95" width="20" height="6" fill="white"/>
+	</g>
+	<text x="80" y="85" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold">SHELF</text>
+	<text x="80" y="105" fill="white" font-size="16" font-family="Arial, sans-serif" font-weight="bold">SPACE</text>
+</svg>
