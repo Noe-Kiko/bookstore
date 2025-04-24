@@ -110,7 +110,7 @@
                                     <div class="product-category">
                                         <a href="{% url 'core:product-detail' p.pid %}">{{ p.category.title }}</a>
                                     </div>
-                                    <h2><a href="shop-product-right.html">{{ p.title }}</a></h2>
+                                    <h2><a href="{% url 'core:product-detail' p.pid %}">{{ p.title }}</a></h2>
                                     <div>
                                         {% if p.vendor %}
                                         <span class="font-small text-muted">By <a href="{% url 'core:vendor-detail' p.vendor.vid %}">{{ p.vendor.vendor_title }}</a></span>
