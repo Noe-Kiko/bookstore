@@ -239,3 +239,10 @@ STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default="")
 
 # Below .env stripe_secret_key
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+
+
+ALLOWED_HOSTS = [
+    'shelf-space-gtgydhdvbkbsg2gt.eastus2-01.azurewebsites.net',
+    'shelf-space-gtgydhdvbkbsg2gt.azurewebsites.net',  # Add this too, just in case
+    'localhost',  # Optional for local dev
+]
