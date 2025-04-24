@@ -5,7 +5,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-Copy project
 COPY . .
 
 RUN if [ ! -f /home/db.sqlite3 ]; then cp /app/db.sqlite3 /home/db.sqlite3; fi
