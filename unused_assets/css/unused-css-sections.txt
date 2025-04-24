@@ -1,0 +1,37 @@
+# UNUSED CSS SECTIONS FROM main.css
+
+The following sections of main.css are not actively used in the application and can be safely removed:
+
+1. Blog section (line 5852)
+   - blog archive header
+   - tags list
+   - related blog styles
+   - not used as site has no blog functionality
+
+2. Entry meta (line 6091)
+   - blog post metadata styles
+   - not used as site has no blog posts
+
+3. Loop Grid (line 6235)
+   - blog grid layout styles
+   - not used as site has no blog grid
+
+4. Map (line 3352)
+   - map related styles
+   - no interactive maps used in the application
+
+5. Deal banners (line 3674)
+   - special promotional banner styles
+   - not used in current templates
+
+6. Mobile demo (in main.js, around lines 690-694)
+   - JavaScript code for mobile demo features
+   - not used in production site
+
+Note: The author-2.png image in the blog directory IS used and should be kept, but other blog-related assets can be removed.
+
+-----------
+
+These sections can be commented out or removed from main.css to reduce file size. However, a backup should be made before making these changes, and the site should be thoroughly tested after modifications.
+
+Estimated size reduction: 5-10% of main.css (approximately 10-25KB)

@@ -1,0 +1,17 @@
+689-    });
+690-
+691:    /*--- Mobile demo active ----*/
+692:    var demo = $(".tm-demo-options-wrapper");
+693:    $(".view-demo-btn-active").on("click", function(e) {
+694-        e.preventDefault();
+695:        demo.toggleClass("demo-open");
+696-    });
+697-
+698-    /*-----More Menu Open----*/
+699-    $(".more_slide_open").slideUp();
+700-    $(".more_categories").on("click", function() {
+701-        $(this).toggleClass("show");
+702-        $(".more_slide_open").slideToggle();
+703-    });
+704-
+705-    /*-----Modal----*/

@@ -1,0 +1,51 @@
+/*BLOG*/
+
+.archive-header {
+    background: url(../imgs/blog/header-bg.png) no-repeat center center;
+    border-radius: 20px;
+    padding: 70px 80px;
+    background-size: cover;
+}
+
+.tags-list li {
+    display: inline-block;
+    margin: 0 15px 0 0;
+}
+
+.tags-list li a {
+    background-color: #fff;
+    display: inline-block;
+    border-radius: 30px;
+    -webkit-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05);
+    padding: 10px 20px;
+    border: 1px solid #ececec;
+    font-family: "Quicksand", sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.tags-list li a i {
+    color: #B6B6B6;
+    font-size: 10px;
+}
+
+.tags-list li.active a {
+    color: #253D4E;
+}
+
+.post-list article:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.post-list .post-thumb {
+    max-width: 221px;
+    overflow: hidden;
+}
+
+.post-list .post-thumb a {
+    margin-bottom: 0;
+}
+
+.post-list .post-title {
+    font-weight: 500;

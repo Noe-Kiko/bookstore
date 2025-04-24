@@ -1,0 +1,49 @@
+# Git
+.git
+.gitignore
+
+# Docker
+.docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+.env
+
+# Local development
+.DS_Store
+*.sqlite3
+media/
+staticfiles/
+unused_assets/
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo 

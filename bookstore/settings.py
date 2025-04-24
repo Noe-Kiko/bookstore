@@ -15,6 +15,7 @@ from pathlib import Path
 # Note by Noe
 # Import OS
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +28,7 @@ env.read_env()
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-om3!9_3d0*@pc#m1_mtur32j0kqv+1j3-&+%j#*-u_nzta1lj_'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-om3!9_3d0*@pc#m1_mtur32j0kqv+1j3-&+%j#*-u_nzta1lj_')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
@@ -40,13 +41,16 @@ ALLOWED_HOSTS = [
     '127.0.0.1', 
     'localhost', 
     '0.0.0.0', 
-    '127.0.0.1:8000'
+    '127.0.0.1:8000',
+    # Heroku hosts
+    '.herokuapp.com',
 ]
 
 # CSRF Trusted Origins - needed for form submissions in production
 CSRF_TRUSTED_ORIGINS = [
     'https://shelf-space-gtgydhdvbkbsg2gt.eastus2-01.azurewebsites.net',
     'https://shelf-space-gtgydhdvbkbsg2gt.azurewebsites.net',
+    'https://*.herokuapp.com',
 ]
 
 # This fix allowed the visual glitch to be removed
@@ -123,22 +127,29 @@ WSGI_APPLICATION = 'bookstore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Check if running on Azure (environment variable set in Azure App Service)
-RUNNING_ON_AZURE = os.environ.get('WEBSITE_HOSTNAME') is not None
-
-if RUNNING_ON_AZURE:
-    # Azure path
-    DB_PATH = os.path.join('/home/data', 'db.sqlite3')
-else:
-    # Local path
-    DB_PATH = os.path.join(BASE_DIR, 'db.sqlite3')
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DB_PATH,
+# Check if running on Heroku (DATABASE_URL will be set)
+if 'DATABASE_URL' in os.environ:
+    # Use Heroku's PostgreSQL database
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
-}
+else:
+    # Check if running on Azure (environment variable set in Azure App Service)
+    RUNNING_ON_AZURE = os.environ.get('WEBSITE_HOSTNAME') is not None
+
+    if RUNNING_ON_AZURE:
+        # Azure path
+        DB_PATH = os.path.join('/home/data', 'db.sqlite3')
+    else:
+        # Local path
+        DB_PATH = os.path.join(BASE_DIR, 'db.sqlite3')
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': DB_PATH,
+        }
+    }
 
 
 # Password validation
@@ -269,3 +280,9 @@ STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY", default="")
 
 # Below .env stripe_secret_key
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+
+# Heroku settings
+if os.environ.get('IS_HEROKU', '') == 'True':
+    # Configure secure SSL redirect
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True

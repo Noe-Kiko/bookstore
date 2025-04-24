@@ -1,0 +1,23 @@
+2248:/*Carausel*/
+2864:/*Countdown*/
+2932:/*Heading tab*/
+3352:/*Map*/
+3674:/*Deal banners*/
+3802:/*Page > About*/
+4042:/*SHOP*/
+4906:/*Product list*/
+5019:/*PRODUCT DETAILS*/
+5852:/*BLOG*/
+6091:/*Entry meta*/
+6235:/*Loop Grid*/
+6909:/*Responsive*/
+7066:/*Header default*/
+8610:/*LAYOUT -> NAVIGATION STYLE*/
+9300:/*Pagination*/
+9363:/*LAYOUT -> SIDEBAR*/
+9551:/*Social network widget*/
+9891:/*LAYOUT -> SPACING**/
+11716:/*Mobile landscape*/
+11757:/*Tablet*/
+11802:/*Desktop*/
+11919:/*Wide screen*/
